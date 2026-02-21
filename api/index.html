@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORTUNA — A Game of History & Chance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0908;color:#e8dcc8;font-family:'Cormorant Garamond',serif;min-height:100vh;overflow-x:hidden}
+  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0908}::-webkit-scrollbar-thumb{background:#2a2520;border-radius:3px}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-2px)}50%{transform:translateX(2px)}75%{transform:translateX(-1px)}100%{transform:translateX(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  @keyframes drawIn{from{stroke-dashoffset:600}to{stroke-dashoffset:0}}
+  #root{min-height:100vh;background:radial-gradient(ellipse at top,rgba(201,168,76,0.04) 0%,transparent 60%),#0a0908}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+const T = {
+bg:”#0a0908”, card:”#1a1714”, cardH:”#231f1a”,
+gold:”#c9a84c”, goldD:”#8a7332”, goldB:”#e8c95a”,
+cream:”#e8dcc8”, creamD:”#a89b87”,
+red:”#8b2500”, redB:”#c13b1b”,
+green:”#2d5a27”, greenB:”#4a8c3f”,
+bdr:”#2a2520”,
+};
+
+const METRICS = [
+{ key:“glory”, label:“Glory”, color:”#e8c95a”, desc:“Achievement and historical impact” },
+{ key:“boldness”, label:“Boldness”, color:”#c13b1b”, desc:“Willingness to take desperate risks” },
+{ key:“cunning”, label:“Cunning”, color:”#2a6aaa”, desc:“Political maneuvering and adaptability” },
+{ key:“virtue”, label:“Virtue”, color:”#4a8c3f”, desc:“Honor, mercy, and moral courage” },
+{ key:“ruthlessness”, label:“Ruthlessness”, color:”#8b2500”, desc:“Willingness to sacrifice others for power” },
+{ key:“plausibility”, label:“Plausibility”, color:”#a89b87”, desc:“How historically grounded the alternate history is” },
+{ key:“novelty”, label:“Novelty”, color:”#9b59b6”, desc:“How far the story diverged from known history” },
+];
+
+const SCORE_PROMPT = `You are judging a completed playthrough of an alternate history game. Analyze the player’s choices and outcomes, then score them on 7 metrics.
+
+RESPOND WITH ONLY VALID JSON. No markdown, no backticks.
+
+METRICS (each scored 1-10):
+
+- glory: How much did the player achieve? Conquering empires = 10, mere survival = 3, death = 1
+- boldness: How often did they take high-risk choices? Always safe = 2, mix = 5, reckless gambler = 9
+- cunning: Political skill — switching factions wisely, brokering deals, reading situations = high
+- virtue: Honor and mercy — saving lives, keeping oaths, acting with integrity = high
+- ruthlessness: Willingness to betray, proscribe, sacrifice others for advantage = high (inverse of virtue, but not exactly — a player can be both ruthless AND virtuous in different moments)
+- plausibility: How believable is this alternate history? Grounded counterfactuals = high, wild implausibility = low
+- novelty: How different from known history? Repeating real events = low, truly original paths = high
+
+Also provide:
+
+- epithet: A 2-5 word title for this playthrough (e.g. “The Reluctant Kingmaker”, “Butcher of Philippi”, “The Philosopher Senator”)
+- summary: A single compelling sentence summarizing the entire playthrough
+- assessment: 2-3 sentences of literary judgment on the player’s journey
+
+FORMAT:
+{“glory”:7,“boldness”:5,“cunning”:8,“virtue”:6,“ruthlessness”:3,“plausibility”:7,“novelty”:6,“epithet”:“The Reluctant Kingmaker”,“summary”:“A senator who tried to save the Republic through diplomacy but was forced to choose the sword.”,“assessment”:“Your journey was marked by a tension between idealism and pragmatism…”}`;
+
+const SCENARIOS = [
+{ id:“republic”, title:“The Fall of the Republic”, sub:“Rome, 49 BC”,
+desc:“You are a Roman senator at the moment Caesar crosses the Rubicon. Navigate the civil wars that will transform Rome forever.”,
+ctx:`The player is a fictional Roman senator named Marcus Aurelius Corvinus in 49 BC, at the moment Caesar crosses the Rubicon. The game begins here but will diverge into alternate history based on choices and dice outcomes.
+
+KEY CONTEXT: Key figures include Julius Caesar, Pompey Magnus, Marcus Brutus, Cassius, Cicero, Mark Antony, Octavian, Cato, Cleopatra, Lepidus. Factions: Caesarians (populares), Pompeians/Optimates, later the Liberatores, later the Second Triumvirate. Military: Roman legions, provincial armies, naval warfare. Political: Senate authority, dictatorships, proscriptions, triumvirates. Geographic: Rome, Gaul, Greece, Egypt, Spain, Africa.
+
+The player starts with moderate political influence, military experience from service in Gaul, and personal wealth. Connected to multiple factions but uncommitted.` }, { id:"punic", title:"The Punic Wars", sub:"Rome & Carthage, 218 BC", desc:"Hannibal has crossed the Alps with his war elephants. You are a young tribune thrust into Rome's greatest crisis.", ctx:`The player is a fictional Roman military tribune named Lucius Cornelius Falco in 218 BC, as Hannibal Barca crosses the Alps into Italy.
+
+KEY CONTEXT: Key figures: Hannibal Barca, Scipio Africanus (young, not yet famous), Fabius Maximus the Delayer, Hasdrubal, Maharbal, Marcellus, consuls Varro and Paullus. Key battles: Trebia, Lake Trasimene, Cannae, Zama. Military: Roman manipular legions, Carthaginian mercenary armies, war elephants, Numidian cavalry. Political: Roman Senate, allied Italian cities whose loyalty is being tested. Strategic: Fabian delay strategy vs aggressive engagement, Hannibal’s supply problems, the question of whether Italian allies will defect.
+
+The player starts as a junior officer with a patrician family name, political connections through their father, and combat experience in minor border skirmishes.` }, { id:"fall", title:"The Fall of Rome", sub:"Western Empire, 410 AD", desc:"The Visigoths are at the gates. You are a Roman general trying to hold together a crumbling empire.", ctx:`The player is a fictional Roman general named Flavius Marcellinus in 410 AD, as Alaric and the Visigoths threaten Rome.
+
+KEY CONTEXT: Key figures: Alaric the Visigoth, Emperor Honorius (in Ravenna, ineffective), Stilicho (recently executed), Galla Placidia, Athaulf. The Western Empire is in terminal decline. The field army is depleted, barbarian foederati make up much of the military. Political: East-West division, Ravenna as capital, church authority growing. Geographic: Italy fragmenting, Gaul under pressure, Britain abandoned, Africa still viable. The player commands about 5,000 mixed Roman-Gothic troops and has connections at court and among barbarian leaders.` }, { id:"pelop", title:"The Peloponnesian War", sub:"Athens, 431 BC", desc:"Athens and Sparta are at war. You are an Athenian general elected by the assembly. Democracy and empire hang in the balance.", ctx:`The player is a fictional Athenian strategos named Demetrios of Alopece in 431 BC, at the outbreak of the Peloponnesian War.
+
+KEY CONTEXT: Key figures: Pericles, Cleon, Nicias, Alcibiades, Brasidas, Lysander, Archidamus. Key events: Plague of Athens, Sicilian Expedition, oligarchic coup, fall of Athens. Military: Athenian naval supremacy (triremes), Spartan hoplite supremacy, the Long Walls. Political: Athenian radical democracy, Delian League/Athenian Empire, Spartan dual kingship. Strategic: Pericles’ defensive strategy vs aggressive options, tribute funding Athens’ war effort.
+
+The player starts as a newly elected strategos from a wealthy family, with naval experience and moderate assembly influence.` },
+];
+
+const SYS_PROMPT = `You are the game master for an open-ended alternate history game. You generate immersive narrative scenarios with decision points.
+
+CRITICAL RULES:
+
+1. Respond with ONLY valid JSON. No markdown, no backticks, no preamble.
+1. Each choice must have a hidden “probability” field (integer 1-95) representing percent chance of success. The PLAYER DOES NOT SEE THIS. Base it on historical plausibility, the player’s standing, and the difficulty of the action.
+1. Each choice has a visible “risk_level” field: “low”, “moderate”, “high”, or “desperate”.
+1. Choices should range from cautious (higher probability) to bold (lower probability, higher reward).
+1. Write narrative in second person, immersive and literary. 2-3 paragraphs.
+1. Generate exactly 3-4 choices. Each meaningfully different in strategy.
+1. Ground everything in real historical detail.
+1. The game is OPEN-ENDED. Don’t railroad toward known history. Create genuine alternate history.
+1. Adjust standing_change values: bold successes reward more, bold failures punish more.
+1. If standing below 15, generate desperate scenarios with possible defeat.
+1. If standing above 85, note dominance and offer greater ambition or consolidation.
+1. NEVER repeat scenarios. Always advance.
+
+JSON FORMAT:
+{“year”:“string”,“title”:“string”,“narrative”:“string”,“standing_summary”:“string”,“choices”:[{“id”:“a”,“text”:“string”,“probability”:70,“risk_level”:“moderate”,“success_outcome”:“string”,“failure_outcome”:“string”,“standing_change_success”:8,“standing_change_failure”:-12}],“is_final”:false,“defeat_narrative”:null}
+
+If truly hopeless (standing ~0): is_final=true with defeat_narrative.`;
+
+// — API & Parsing —
+
+function parseScene(raw) {
+if (!raw) return null;
+const s = typeof raw === “string” ? raw : JSON.stringify(raw);
+const clean = s.replace(/`json|`/g,””).trim();
+try { const j = JSON.parse(clean); if (j.narrative && j.choices) return j;
+if (j.content) { const txt = j.content.filter(b=>b.type===“text”).map(b=>b.text).join(””); return parseScene(txt); }
+} catch(e) {}
+const m = clean.match(/{[\s\S]*}/);
+if (m) { try { const j = JSON.parse(m[0]); if (j.narrative) return j; } catch(e) {} }
+return null;
+}
+
+function parseScores(raw) {
+if (!raw) return null;
+const s = typeof raw === “string” ? raw : JSON.stringify(raw);
+const clean = s.replace(/`json|`/g,””).trim();
+try { const j = JSON.parse(clean); if (j.epithet) return j;
+if (j.content) { const txt = j.content.filter(b=>b.type===“text”).map(b=>b.text).join(””); return parseScores(txt); }
+} catch(e) {}
+const m = clean.match(/{[\s\S]*}/);
+if (m) { try { const j = JSON.parse(m[0]); if (j.epithet) return j; } catch(e) {} }
+return null;
+}
+
+async function apiCall(system, userContent) {
+for (let attempt = 0; attempt < 3; attempt++) {
+try {
+if (attempt > 0) await new Promise(r=>setTimeout(r,2000));
+const resp = await fetch(”/api/generate”, {
+method:“POST”, headers:{“Content-Type”:“application/json”},
+body: JSON.stringify({ system, messages:[{role:“user”,content:userContent}] }),
+});
+if (resp.status === 429) { await new Promise(r=>setTimeout(r,5000)); continue; }
+if (!resp.ok) { const e = await resp.json().catch(()=>({})); throw new Error(e.error||`HTTP ${resp.status}`); }
+return await resp.json();
+} catch(e) { if (attempt===2) return {_error:e.message}; }
+}
+return {_error:“Failed after 3 attempts”};
+}
+
+async function generate(scenario, history, standing, setStatus) {
+const recent = history.slice(-6);
+const hist = recent.length > 0
+? recent.map(h=>`[${h.year}] ${h.title}: "${h.choice}" → ${h.ok?"SUCCESS":"FAILURE"}: ${h.outcome}`).join(”\n”)
+: “First turn — game just started.”;
+setStatus(“The threads of fate are weaving…”);
+const data = await apiCall(SYS_PROMPT, `${scenario.ctx}\n\nGAME HISTORY (${history.length} turns, recent):\n${hist}\n\nSTANDING: ${standing}/100\n\nGenerate next scenario. JSON only.`);
+if (data._error) return data;
+const scene = parseScene(data);
+return scene || {_error:“Could not parse scenario”};
+}
+
+async function scoreGame(scenario, history, standing, wasVictory) {
+const fullHist = history.map((h,i)=>`Turn ${i+1} [${h.year}] ${h.title}: Chose "${h.choice}" → ${h.ok?"SUCCESS":"FAILURE"}: ${h.outcome}`).join(”\n”);
+const data = await apiCall(SCORE_PROMPT, `SCENARIO: ${scenario.title} — ${scenario.ctx.slice(0,200)}\n\nFULL GAME HISTORY:\n${fullHist}\n\nFINAL STANDING: ${standing}/100\nOUTCOME: ${wasVictory?"Player declared victory":"Player was defeated"}\nTURNS SURVIVED: ${history.length}\n\nScore this playthrough. JSON only.`);
+if (data._error) return null;
+return parseScores(data);
+}
+
+// — Leaderboard (localStorage) —
+
+function getLeaderboard() {
+try { return JSON.parse(localStorage.getItem(“fortuna_lb”)||”[]”); } catch(e) { return []; }
+}
+function saveToLeaderboard(entry) {
+const lb = getLeaderboard();
+lb.unshift(entry);
+if (lb.length > 50) lb.length = 50; // keep last 50
+try { localStorage.setItem(“fortuna_lb”, JSON.stringify(lb)); } catch(e) {}
+}
+
+// — Components —
+
+function Btn({ children, onClick, small, green, disabled }) {
+const [h, setH] = useState(false);
+const base = green?T.greenB:T.gold;
+return <button onClick={onClick} disabled={disabled} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
+style={{padding:small?“8px 24px”:“12px 40px”,background:h&&!disabled?base:“transparent”,
+border:`1px solid ${base}`,color:h&&!disabled?T.bg:base,
+fontFamily:”‘Cinzel’,serif”,fontSize:small?“0.75rem”:“0.85rem”,
+letterSpacing:“0.15em”,cursor:disabled?“default”:“pointer”,
+transition:“all 0.2s”,display:“block”,margin:“0 auto”,opacity:disabled?0.5:1}}>{children}</button>;
+}
+
+function Bar({ v }) {
+const c = v<20?T.redB:v<45?T.gold:T.greenB;
+return <div style={{marginBottom:8}}>
+<div style={{display:“flex”,justifyContent:“space-between”,marginBottom:4}}>
+<span style={{color:T.goldD,fontSize:“0.75rem”,letterSpacing:“0.1em”}}>STANDING</span>
+<span style={{color:T.cream,fontFamily:”‘Cinzel’,serif”,fontSize:“0.75rem”}}>{v}/100</span>
+</div>
+<div style={{width:“100%”,height:4,background:T.bdr,borderRadius:2}}>
+<div style={{width:`${v}%`,height:“100%”,background:c,borderRadius:2,transition:“all 0.5s”}}/>
+</div>
+
+  </div>;
+}
+
+function DiceRoll({ onDone }) {
+const [rolling, setRolling] = useState(true);
+const [face, setFace] = useState(50);
+useEffect(()=>{
+let n=0;
+const iv = setInterval(()=>{n++;setFace(Math.floor(Math.random()*100)+1);
+if(n>=22){clearInterval(iv);setRolling(false);setTimeout(()=>onDone(),800);}
+},80);
+return ()=>clearInterval(iv);
+},[]);
+return <div style={{textAlign:“center”,padding:“32px 0”}}>
+<p style={{color:T.goldD,fontSize:“0.9rem”,marginBottom:12,fontStyle:“italic”}}>Fortune decides…</p>
+<div style={{width:100,height:100,margin:“0 auto”,border:`2px solid ${T.goldD}`,borderRadius:12,
+display:“flex”,alignItems:“center”,justifyContent:“center”,background:T.card,
+animation:rolling?“shake 0.1s infinite”:“none”}}>
+<span style={{fontFamily:”‘Cinzel’,serif”,fontSize:“2rem”,fontWeight:700,color:T.gold}}>{face}</span>
+</div>
+
+  </div>;
+}
+
+function RadarChart({ scores, size=280 }) {
+const cx = size/2, cy = size/2, r = size*0.38;
+const n = METRICS.length;
+const angleStep = (2*Math.PI)/n;
+const startAngle = -Math.PI/2;
+
+const getPoint = (i, val) => {
+const a = startAngle + i*angleStep;
+const d = (val/10)*r;
+return { x: cx+d*Math.cos(a), y: cy+d*Math.sin(a) };
+};
+
+// Grid rings
+const rings = [2,4,6,8,10];
+const gridLines = rings.map(v => {
+const pts = METRICS.map((_,i)=>getPoint(i,v));
+return pts.map(p=>`${p.x},${p.y}`).join(” “);
+});
+
+// Axis lines
+const axes = METRICS.map((_,i)=>{
+const p = getPoint(i,10);
+return `M${cx},${cy} L${p.x},${p.y}`;
+});
+
+// Data polygon
+const dataPoints = METRICS.map((m,i)=>getPoint(i,scores[m.key]||0));
+const dataPoly = dataPoints.map(p=>`${p.x},${p.y}`).join(” “);
+
+// Labels
+const labels = METRICS.map((m,i)=>{
+const p = getPoint(i,11.8);
+return { …m, x:p.x, y:p.y };
+});
+
+return <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{display:“block”,margin:“0 auto”}}>
+{gridLines.map((pts,i)=><polygon key={i} points={pts} fill="none" stroke={T.bdr} strokeWidth={0.5} opacity={0.6}/>)}
+{axes.map((d,i)=><path key={i} d={d} stroke={T.bdr} strokeWidth={0.5} opacity={0.4}/>)}
+<polygon points={dataPoly} fill=“rgba(201,168,76,0.15)” stroke={T.gold} strokeWidth={1.5}
+style={{animation:“drawIn 1s ease-out”,strokeDasharray:600,strokeDashoffset:0}}/>
+{dataPoints.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={3} fill={METRICS[i].color}/>)}
+{labels.map((l,i)=><text key={i} x={l.x} y={l.y} textAnchor="middle" dominantBaseline="middle"
+fill={l.color} fontSize="9" fontFamily="Cinzel,serif" fontWeight="700" letterSpacing="0.05em">{l.label.toUpperCase()}</text>)}
+</svg>;
+}
+
+function ScoreCard({ scores }) {
+return <div style={{display:“grid”,gridTemplateColumns:“1fr 1fr”,gap:“8px 16px”,maxWidth:400,margin:“0 auto”,marginTop:20}}>
+{METRICS.map(m=><div key={m.key} style={{display:“flex”,justifyContent:“space-between”,alignItems:“center”,padding:“6px 0”,borderBottom:`1px solid ${T.bdr}`}}>
+<span style={{color:m.color,fontSize:“0.85rem”,fontFamily:”‘Cinzel’,serif”,letterSpacing:“0.05em”}}>{m.label}</span>
+<span style={{color:T.cream,fontSize:“1rem”,fontFamily:”‘Cinzel’,serif”,fontWeight:700}}>{scores[m.key]||”?”}/10</span>
+</div>)}
+
+  </div>;
+}
+
+function LeaderboardView({ onBack }) {
+const lb = getLeaderboard();
+return <div style={{maxWidth:640,margin:“0 auto”,padding:“40px 24px”}}>
+<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“center”,marginBottom:32}}>
+<h2 style={{fontFamily:”‘Cinzel’,serif”,color:T.gold,fontSize:“1.4rem”,fontWeight:700,letterSpacing:“0.1em”}}>HALL OF FAME</h2>
+<Btn onClick={onBack} small>BACK</Btn>
+</div>
+{lb.length===0 && <p style={{color:T.creamD,textAlign:“center”,fontSize:“1rem”,fontStyle:“italic”,padding:“40px 0”}}>No games completed yet. Your story awaits.</p>}
+{lb.map((e,i)=><div key={i} style={{background:T.card,border:`1px solid ${T.bdr}`,borderRadius:4,padding:“16px 20px”,marginBottom:12,animation:“fadeIn 0.3s”}}>
+<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“baseline”,marginBottom:6}}>
+<span style={{fontFamily:”‘Cinzel’,serif”,color:T.gold,fontSize:“1rem”,fontWeight:700}}>{e.epithet||“Unknown”}</span>
+<span style={{color:T.creamD,fontSize:“0.8rem”}}>{e.scenario} · {e.turns} turns</span>
+</div>
+<p style={{color:T.cream,fontSize:“0.9rem”,lineHeight:1.5,marginBottom:8}}>{e.summary||””}</p>
+<div style={{display:“flex”,gap:8,flexWrap:“wrap”}}>
+{METRICS.map(m=><span key={m.key} style={{fontSize:“0.7rem”,color:m.color,fontFamily:”‘Cinzel’,serif”}}>
+{m.label.slice(0,3).toUpperCase()} {e.scores?.[m.key]||”?”}
+</span>)}
+</div>
+<div style={{display:“flex”,justifyContent:“space-between”,marginTop:6}}>
+<span style={{fontSize:“0.75rem”,color:e.victory?T.greenB:T.redB}}>{e.victory?“VICTORY”:“DEFEAT”}</span>
+<span style={{fontSize:“0.7rem”,color:T.creamD}}>{e.date||””}</span>
+</div>
+</div>)}
+
+  </div>;
+}
+
+// — Endgame Screen —
+
+function EndgameScreen({ scenario, history, standing, wasVictory, defeatText, onNewGame, onLeaderboard }) {
+const [scores, setScores] = useState(null);
+const [loading, setLoading] = useState(true);
+const [saved, setSaved] = useState(false);
+
+useEffect(()=>{
+(async()=>{
+const result = await scoreGame(scenario, history, standing, wasVictory);
+if (result && result.epithet) {
+setScores(result);
+// Auto-save to leaderboard
+saveToLeaderboard({
+epithet: result.epithet,
+summary: result.summary,
+scores: { glory:result.glory, boldness:result.boldness, cunning:result.cunning,
+virtue:result.virtue, ruthlessness:result.ruthlessness, plausibility:result.plausibility, novelty:result.novelty },
+scenario: scenario.title,
+turns: history.length,
+standing,
+victory: wasVictory,
+date: new Date().toLocaleDateString(),
+});
+setSaved(true);
+}
+setLoading(false);
+})();
+},[]);
+
+const isDefeat = !wasVictory;
+
+return <div style={{maxWidth:600,margin:“0 auto”,padding:“40px 24px 80px”,textAlign:“center”}}>
+<div style={{color:isDefeat?T.redB:T.gold,fontSize:“2.5rem”,marginBottom:16}}>{isDefeat?“✝”:“✦”}</div>
+<h1 style={{fontFamily:”‘Cinzel’,serif”,color:isDefeat?T.redB:T.gold,fontSize:“1.8rem”,fontWeight:700,letterSpacing:“0.12em”,marginBottom:16}}>
+{isDefeat?“YOUR STORY ENDS”:“VICTORY”}</h1>
+
+```
+{isDefeat && defeatText && <p style={{fontSize:"1.05rem",maxWidth:500,lineHeight:1.85,margin:"0 auto 16px"}}>{defeatText}</p>}
+{!isDefeat && <p style={{fontSize:"1.05rem",maxWidth:500,lineHeight:1.85,margin:"0 auto 16px"}}>
+  After {history.length} turns, you have emerged from the crucible of history.</p>}
+
+<p style={{color:T.creamD,fontSize:"0.9rem",marginBottom:32}}>
+  {history.length} turns · Final standing: {standing}/100</p>
+
+{loading && <div style={{padding:"40px 0"}}>
+  <div style={{color:T.gold,fontSize:"1.5rem",marginBottom:12,animation:"pulse 1.5s infinite"}}>✦</div>
+  <p style={{color:T.creamD,fontStyle:"italic"}}>The historians are rendering their judgment...</p>
+</div>}
+
+{!loading && scores && <>
+  <div style={{width:60,height:1,background:T.goldD,margin:"0 auto 24px"}}/>
+  <h2 style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"1.3rem",fontWeight:700,letterSpacing:"0.1em",marginBottom:4}}>
+    {scores.epithet}</h2>
+  <p style={{color:T.cream,fontSize:"1rem",fontStyle:"italic",lineHeight:1.6,maxWidth:480,margin:"0 auto 24px"}}>
+    {scores.summary}</p>
+
+  <RadarChart scores={scores}/>
+  <ScoreCard scores={scores}/>
+
+  <div style={{background:T.card,border:`1px solid ${T.bdr}`,borderRadius:4,padding:"16px 20px",marginTop:24,textAlign:"left",maxWidth:480,margin:"24px auto 0"}}>
+    <p style={{color:T.cream,fontSize:"0.95rem",lineHeight:1.7}}>{scores.assessment}</p>
+  </div>
+
+  {saved && <p style={{color:T.goldD,fontSize:"0.8rem",marginTop:16,fontStyle:"italic"}}>Recorded in the Hall of Fame</p>}
+</>}
+
+{!loading && !scores && <p style={{color:T.creamD,fontSize:"0.9rem",marginBottom:24,fontStyle:"italic"}}>
+  The historians could not reach a verdict. Your deeds speak for themselves.</p>}
+
+<div style={{display:"flex",gap:16,justifyContent:"center",marginTop:32}}>
+  <Btn onClick={onNewGame}>NEW GAME</Btn>
+  <Btn onClick={onLeaderboard} small>HALL OF FAME</Btn>
+</div>
+```
+
+  </div>;
+}
+
+// — Game Screen —
+
+function Game({ scenario, onQuit, onLeaderboard }) {
+const [st, setSt] = useState(50);
+const [turn, setTurn] = useState(0);
+const [scene, setScene] = useState(null);
+const [loading, setLoading] = useState(true);
+const [status, setStatus] = useState(“The threads of fate are weaving…”);
+const [err, setErr] = useState(null);
+const [sel, setSel] = useState(null);
+const [phase, setPhase] = useState(“load”);
+const [outcome, setOutcome] = useState(””);
+const [ok, setOk] = useState(null);
+const [hist, setHist] = useState([]);
+const [defeat, setDefeat] = useState(””);
+const ref = useRef(null);
+const nextRef = useRef({hist:[],st:50});
+
+const load = async (h, s) => {
+setLoading(true);setPhase(“load”);setSel(null);setOk(null);setOutcome(””);setErr(null);
+const result = await generate(scenario, h, s, setStatus);
+if (result._error) { setErr(result._error); setLoading(false); return; }
+if (result.is_final && result.defeat_narrative) { setDefeat(result.defeat_narrative); setPhase(“defeat”); setLoading(false); return; }
+if (!result.choices?.length) { setErr(“Scenario had no choices — retrying may help.”); setLoading(false); return; }
+setScene(result); setPhase(“play”); setLoading(false);
+};
+
+useEffect(()=>{load([],50);},[]);
+useEffect(()=>{if(ref.current) ref.current.scrollTo({top:0,behavior:“smooth”});},[phase,scene]);
+
+const doRoll = () => {
+const roll = Math.floor(Math.random()*100)+1;
+const success = roll <= sel.probability;
+setOk(success);
+const out = success ? sel.success_outcome : sel.failure_outcome;
+setOutcome(out);
+const delta = success ? sel.standing_change_success : sel.standing_change_failure;
+const ns = Math.max(0,Math.min(100,st+delta));
+setSt(ns);
+const entry = {year:scene.year,title:scene.title,choice:sel.text,ok:success,outcome:out,risk:sel.risk_level};
+const nh = […hist, entry];
+setHist(nh); setTurn(t=>t+1);
+nextRef.current = {hist:nh,st:ns};
+setPhase(“outcome”);
+};
+
+// Endgame screens
+if (phase===“victory”||phase===“defeat”) {
+return <EndgameScreen
+scenario={scenario} history={hist} standing={st}
+wasVictory={phase===“victory”} defeatText={defeat}
+onNewGame={onQuit} onLeaderboard={onLeaderboard}/>;
+}
+
+return <div ref={ref} style={{maxWidth:720,margin:“0 auto”,padding:“24px 24px 80px”}}>
+<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“center”,marginBottom:20,borderBottom:`1px solid ${T.bdr}`,paddingBottom:14}}>
+<div>
+<span style={{color:T.goldD,fontSize:“0.8rem”,letterSpacing:“0.1em”}}>{scenario.title.toUpperCase()}</span>
+{scene && <><span style={{color:T.bdr,margin:“0 8px”}}>·</span><span style={{color:T.creamD,fontSize:“0.8rem”}}>{scene.year}</span></>}
+</div>
+<div style={{display:“flex”,alignItems:“center”,gap:16}}>
+<span style={{color:T.creamD,fontSize:“0.8rem”}}>Turn {turn+1}</span>
+<button onClick={onQuit} style={{background:“none”,border:`1px solid ${T.bdr}`,color:T.creamD,fontSize:“0.75rem”,padding:“4px 10px”,cursor:“pointer”,borderRadius:3,fontFamily:”‘Cormorant Garamond’,serif”}}>Quit</button>
+</div>
+</div>
+
+```
+<Bar v={st}/>
+
+{loading && <div style={{textAlign:"center",padding:"80px 0"}}>
+  <div style={{color:T.gold,fontSize:"1.5rem",marginBottom:16,animation:"pulse 1.5s infinite"}}>✦</div>
+  <p style={{color:T.creamD,fontSize:"1rem",fontStyle:"italic"}}>{status}</p>
+</div>}
+
+{err && <div style={{textAlign:"center",padding:"40px 16px"}}>
+  <p style={{color:T.redB,marginBottom:12,fontSize:"0.95rem"}}>Scenario generation failed.</p>
+  <p style={{color:T.creamD,fontSize:"0.8rem",marginBottom:20,wordBreak:"break-word"}}>{err}</p>
+  <Btn onClick={()=>load(hist,st)} small>RETRY</Btn>
+</div>}
+
+{!loading && !err && scene && <>
+  <h2 style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"1.5rem",fontWeight:700,marginTop:20,marginBottom:8,letterSpacing:"0.08em"}}>{scene.title}</h2>
+  {scene.standing_summary && <p style={{color:T.creamD,fontSize:"0.9rem",fontStyle:"italic",marginBottom:24}}>{scene.standing_summary}</p>}
+  <p style={{whiteSpace:"pre-wrap",lineHeight:1.85,fontSize:"1.08rem",marginBottom:32}}>{scene.narrative}</p>
+
+  {st>=85 && phase==="play" && <div style={{background:"rgba(45,90,39,0.12)",border:`1px solid ${T.green}`,borderRadius:4,padding:16,marginBottom:24,textAlign:"center"}}>
+    <p style={{color:T.greenB,fontFamily:"'Cinzel',serif",fontSize:"0.8rem",letterSpacing:"0.1em",marginBottom:12}}>YOUR POSITION IS STRONG — You may declare victory or press your fortune.</p>
+    <Btn onClick={()=>setPhase("victory")} small green>DECLARE VICTORY</Btn>
+  </div>}
+
+  {(phase==="play"||phase==="rolling"||phase==="outcome") && scene.choices && <div style={{marginTop:8}}>
+    <p style={{color:T.goldB,fontFamily:"'Cinzel',serif",fontSize:"0.8rem",letterSpacing:"0.15em",marginBottom:18,textTransform:"uppercase"}}>What do you do?</p>
+    {scene.choices.map(c=>{
+      const s = sel?.id===c.id;
+      const rc = c.risk_level==="desperate"?"#ff4444":c.risk_level==="high"?T.redB:c.risk_level==="moderate"?T.gold:T.greenB;
+      return <button key={c.id} onClick={()=>{if(phase==="play"){setSel(c);setPhase("rolling");}}}
+        disabled={phase!=="play"}
+        style={{display:"block",width:"100%",padding:"16px 20px",marginBottom:12,
+          background:s?T.cardH:T.card,border:`1px solid ${s?T.gold:T.bdr}`,borderRadius:4,
+          color:T.cream,fontSize:"1.02rem",fontFamily:"'Cormorant Garamond',serif",
+          textAlign:"left",cursor:phase==="play"?"pointer":"default",transition:"all 0.2s",lineHeight:1.6}}>
+        <div style={{marginBottom:8}}>{c.text}</div>
+        <span style={{fontSize:"0.7rem",letterSpacing:"0.08em",textTransform:"uppercase",color:rc,fontFamily:"'Cinzel',serif"}}>{c.risk_level}</span>
+      </button>;
+    })}
+  </div>}
+
+  {phase==="rolling" && sel && <DiceRoll onDone={doRoll}/>}
+  {phase==="outcome" && <div style={{marginTop:24,animation:"fadeIn 0.4s"}}>
+    <p style={{fontFamily:"'Cinzel',serif",fontSize:"1.1rem",fontWeight:700,letterSpacing:"0.15em",marginBottom:16,textAlign:"center",
+      color:ok?T.greenB:T.redB}}>{ok?"FORTUNE FAVORS YOU":"THE FATES ARE CRUEL"}</p>
+    <div style={{background:ok?"rgba(45,90,39,0.12)":"rgba(139,37,0,0.12)",border:`1px solid ${ok?T.green:T.red}`,borderRadius:4,padding:22,marginBottom:24}}>
+      <p style={{color:T.cream,fontSize:"1.02rem",lineHeight:1.8}}>{outcome}</p>
+    </div>
+    <Btn onClick={()=>load(nextRef.current.hist,nextRef.current.st)}>CONTINUE</Btn>
+  </div>}
+</>}
+```
+
+  </div>;
+}
+
+// — Title Screen —
+
+function Title({ onStart, onLeaderboard }) {
+const [sel, setSel] = useState(null);
+const lb = getLeaderboard();
+return <div style={{minHeight:“100vh”,display:“flex”,flexDirection:“column”,alignItems:“center”,padding:“60px 24px”}}>
+<div style={{marginBottom:20,color:T.goldD,fontSize:“2.5rem”,letterSpacing:“0.3em”}}>✦</div>
+<h1 style={{fontFamily:”‘Cinzel’,serif”,color:T.gold,fontSize:“2.2rem”,fontWeight:700,letterSpacing:“0.12em”,marginBottom:8,textAlign:“center”}}>FORTUNA</h1>
+<p style={{color:T.creamD,fontSize:“1rem”,fontStyle:“italic”,marginBottom:8}}>A Game of History & Chance</p>
+<div style={{width:60,height:1,background:T.goldD,margin:“16px auto 24px”}}/>
+<p style={{color:T.creamD,fontSize:“1.05rem”,maxWidth:520,lineHeight:1.75,marginBottom:12,textAlign:“center”}}>
+Step into a pivotal moment in the ancient world. Your choices will shape an alternate history — but fortune and the dice will have their say. Each game is unique, open-ended, and judged by history.</p>
+<p style={{color:T.goldD,fontSize:“0.85rem”,fontStyle:“italic”,marginBottom:36,textAlign:“center”}}>Never tell me the odds.</p>
+
+```
+<p style={{color:T.goldB,fontFamily:"'Cinzel',serif",fontSize:"0.8rem",letterSpacing:"0.15em",marginBottom:20,textTransform:"uppercase"}}>Choose your era</p>
+<div style={{width:"100%",maxWidth:560}}>
+  {SCENARIOS.map(s=><button key={s.id} onClick={()=>setSel(s)} style={{
+    display:"block",width:"100%",padding:"18px 22px",marginBottom:12,
+    background:sel?.id===s.id?T.cardH:T.card,border:`1px solid ${sel?.id===s.id?T.gold:T.bdr}`,
+    borderRadius:4,textAlign:"left",cursor:"pointer",transition:"all 0.2s",fontFamily:"'Cormorant Garamond',serif"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
+      <span style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"1rem",fontWeight:700}}>{s.title}</span>
+      <span style={{color:T.goldD,fontSize:"0.85rem"}}>{s.sub}</span>
+    </div>
+    <p style={{color:T.creamD,fontSize:"0.92rem",lineHeight:1.6}}>{s.desc}</p>
+  </button>)}
+</div>
+<div style={{display:"flex",gap:16,marginTop:28,animation:sel?"fadeIn 0.3s":"none"}}>
+  {sel && <Btn onClick={()=>onStart(sel)}>BEGIN</Btn>}
+  {lb.length>0 && <Btn onClick={onLeaderboard} small>HALL OF FAME</Btn>}
+</div>
+```
+
+  </div>;
+}
+
+// — App —
+
+function App() {
+const [scr, setScr] = useState(“title”);
+const [act, setAct] = useState(null);
+const [key, setKey] = useState(0);
+return <>
+{scr===“title” && <Title onStart={s=>{setAct(s);setScr(“game”);setKey(k=>k+1);}} onLeaderboard={()=>setScr(“leaderboard”)}/>}
+{scr===“game” && act && <Game key={key} scenario={act}
+onQuit={()=>{setScr(“title”);setAct(null);}}
+onLeaderboard={()=>setScr(“leaderboard”)}/>}
+{scr===“leaderboard” && <LeaderboardView onBack={()=>setScr(“title”)}/>}
+</>;
+}
+
+ReactDOM.createRoot(document.getElementById(‘root’)).render(<App/>);
+</script>
+
+</body>
+</html>
