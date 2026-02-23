@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -29,398 +28,385 @@ const SM=[{key:"glory",label:"Glory",color:"#e8c95a"},{key:"boldness",label:"Bol
 const SPROMPT=`You judge a completed alternate history game. Respond ONLY valid JSON, no markdown. Score 1-10: glory(achievement), boldness(risk-taking), cunning(political skill), virtue(honor/mercy), ruthlessness(betrayal), plausibility(historical believability), novelty(divergence from history). Also: epithet(2-5 word title), summary(one sentence), assessment(2-3 sentences). Format: {"glory":7,"boldness":5,"cunning":8,"virtue":6,"ruthlessness":3,"plausibility":7,"novelty":6,"epithet":"Title","summary":"...","assessment":"..."}`;
 
 const SCENARIOS=[
-{id:“republic”,title:“The Fall of the Republic”,sub:“Rome, 49 BC”,
-desc:“You are a Roman senator as Caesar crosses the Rubicon. Navigate civil wars that will transform Rome forever.”,
-factions:[{key:“caesarian”,name:“Caesarians”,color:”#c13b1b”},{key:“optimate”,name:“Optimates”,color:”#2a6aaa”},{key:“military”,name:“The Legions”,color:”#8a7332”},{key:“populace”,name:“People of Rome”,color:”#4a8c3f”}],
-resources:[{key:“legions”,name:“Legions”,icon:”\u2694”,mx:10},{key:“wealth”,name:“Wealth”,icon:”\u25C6”,mx:10},{key:“offices”,name:“Office”,icon:”\u269C”,mx:10},{key:“intel”,name:“Intel”,icon:”\u25C8”,mx:10}],
+{id:"republic",title:"The Fall of the Republic",sub:"Rome, 49 BC",
+desc:"You are a Roman senator as Caesar crosses the Rubicon. Navigate civil wars that will transform Rome forever.",
+factions:[{key:"caesarian",name:"Caesarians",color:"#c13b1b"},{key:"optimate",name:"Optimates",color:"#2a6aaa"},{key:"military",name:"The Legions",color:"#8a7332"},{key:"populace",name:"People of Rome",color:"#4a8c3f"}],
+resources:[{key:"legions",name:"Legions",icon:"\u2694",mx:10},{key:"wealth",name:"Wealth",icon:"\u25C6",mx:10},{key:"offices",name:"Office",icon:"\u269C",mx:10},{key:"intel",name:"Intel",icon:"\u25C8",mx:10}],
 startF:{caesarian:50,optimate:50,military:40,populace:40},startR:{legions:2,wealth:5,offices:4,intel:3},
-ctx:“Player is Roman senator Marcus Aurelius Corvinus, 49 BC, as Caesar crosses the Rubicon. KEY FIGURES: Caesar, Pompey, Brutus, Cassius, Cicero, Antony, Octavian, Cato, Cleopatra, Lepidus. FACTIONS tracked: Caesarians(populares/reformers), Optimates(Senate conservatives/Pompey), The Legions(professional soldiers), People of Rome(urban plebs/provincials). RESOURCES tracked: legions(military units), wealth(money/supplies), offices(political authority), intel(spies/information). Player starts with 2 legions, moderate wealth, praetorship, small spy network.”},
-{id:“punic”,title:“The Punic Wars”,sub:“Rome & Carthage, 218 BC”,
-desc:“Hannibal has crossed the Alps. You are a young tribune thrust into Rome’s greatest crisis.”,
-factions:[{key:“senate”,name:“The Senate”,color:”#2a6aaa”},{key:“army”,name:“Roman Army”,color:”#c13b1b”},{key:“allies”,name:“Italian Allies”,color:”#4a8c3f”},{key:“plebs”,name:“Roman People”,color:”#8a7332”}],
-resources:[{key:“legions”,name:“Legions”,icon:”\u2694”,mx:10},{key:“wealth”,name:“Wealth”,icon:”\u25C6”,mx:10},{key:“offices”,name:“Office”,icon:”\u269C”,mx:10},{key:“intel”,name:“Intel”,icon:”\u25C8”,mx:10}],
+ctx:"Player is Roman senator Marcus Aurelius Corvinus, 49 BC, as Caesar crosses the Rubicon. KEY FIGURES: Caesar, Pompey, Brutus, Cassius, Cicero, Antony, Octavian, Cato, Cleopatra, Lepidus. FACTIONS tracked: Caesarians(populares/reformers), Optimates(Senate conservatives/Pompey), The Legions(professional soldiers), People of Rome(urban plebs/provincials). RESOURCES tracked: legions(military units), wealth(money/supplies), offices(political authority), intel(spies/information). Player starts with 2 legions, moderate wealth, praetorship, small spy network."},
+{id:"punic",title:"The Punic Wars",sub:"Rome & Carthage, 218 BC",
+desc:"Hannibal has crossed the Alps. You are a young tribune thrust into Rome's greatest crisis.",
+factions:[{key:"senate",name:"The Senate",color:"#2a6aaa"},{key:"army",name:"Roman Army",color:"#c13b1b"},{key:"allies",name:"Italian Allies",color:"#4a8c3f"},{key:"plebs",name:"Roman People",color:"#8a7332"}],
+resources:[{key:"legions",name:"Legions",icon:"\u2694",mx:10},{key:"wealth",name:"Wealth",icon:"\u25C6",mx:10},{key:"offices",name:"Office",icon:"\u269C",mx:10},{key:"intel",name:"Intel",icon:"\u25C8",mx:10}],
 startF:{senate:40,army:50,allies:50,plebs:40},startR:{legions:1,wealth:4,offices:2,intel:2},
-ctx:“Player is Roman tribune Lucius Cornelius Falco, 218 BC, as Hannibal crosses the Alps. KEY FIGURES: Hannibal, Scipio Africanus(young), Fabius Maximus, Hasdrubal, Maharbal, Marcellus, Varro, Paullus. FACTIONS: Senate(patricians), Roman Army(legions), Italian Allies(socii), Roman People(voters). RESOURCES: legions, wealth, offices, intel. KEY BATTLES: Trebia, Trasimene, Cannae, Zama. Player starts as junior officer with 1 legion, moderate family wealth, minor political connections.”},
-{id:“fall”,title:“The Fall of Rome”,sub:“Western Empire, 410 AD”,
-desc:“The Visigoths are at the gates. You are a Roman general holding together a crumbling empire.”,
-factions:[{key:“court”,name:“Imperial Court”,color:”#9b59b6”},{key:“army”,name:“Roman Army”,color:”#c13b1b”},{key:“church”,name:“The Church”,color:”#e8c95a”},{key:“barb”,name:“Barbarian Leaders”,color:”#4a8c3f”}],
-resources:[{key:“legions”,name:“Troops”,icon:”\u2694”,mx:10},{key:“wealth”,name:“Treasury”,icon:”\u25C6”,mx:10},{key:“offices”,name:“Authority”,icon:”\u269C”,mx:10},{key:“intel”,name:“Intel”,icon:”\u25C8”,mx:10}],
+ctx:"Player is Roman tribune Lucius Cornelius Falco, 218 BC, as Hannibal crosses the Alps. KEY FIGURES: Hannibal, Scipio Africanus(young), Fabius Maximus, Hasdrubal, Maharbal, Marcellus, Varro, Paullus. FACTIONS: Senate(patricians), Roman Army(legions), Italian Allies(socii), Roman People(voters). RESOURCES: legions, wealth, offices, intel. KEY BATTLES: Trebia, Trasimene, Cannae, Zama. Player starts as junior officer with 1 legion, moderate family wealth, minor political connections."},
+{id:"fall",title:"The Fall of Rome",sub:"Western Empire, 410 AD",
+desc:"The Visigoths are at the gates. You are a Roman general holding together a crumbling empire.",
+factions:[{key:"court",name:"Imperial Court",color:"#9b59b6"},{key:"army",name:"Roman Army",color:"#c13b1b"},{key:"church",name:"The Church",color:"#e8c95a"},{key:"barb",name:"Barbarian Leaders",color:"#4a8c3f"}],
+resources:[{key:"legions",name:"Troops",icon:"\u2694",mx:10},{key:"wealth",name:"Treasury",icon:"\u25C6",mx:10},{key:"offices",name:"Authority",icon:"\u269C",mx:10},{key:"intel",name:"Intel",icon:"\u25C8",mx:10}],
 startF:{court:40,army:50,church:30,barb:30},startR:{legions:3,wealth:3,offices:5,intel:4},
-ctx:“Player is Roman general Flavius Marcellinus, 410 AD, as Alaric threatens Rome. KEY FIGURES: Alaric, Emperor Honorius(Ravenna), Stilicho(executed), Galla Placidia, Athaulf, Pope Innocent I. FACTIONS: Imperial Court(Honorius/bureaucrats), Roman Army(depleted/mixed), The Church(growing power), Barbarian Leaders(Alaric/Goths). RESOURCES: legions(troops), wealth(treasury), offices(imperial authority), intel. Player commands 5000 troops, rank of comes rei militaris.”},
-{id:“pelop”,title:“The Peloponnesian War”,sub:“Athens, 431 BC”,
-desc:“Athens and Sparta are at war. You are an Athenian general elected by the assembly.”,
-factions:[{key:“assembly”,name:“The Assembly”,color:”#2a6aaa”},{key:“navy”,name:“Athenian Navy”,color:”#c13b1b”},{key:“league”,name:“Delian League”,color:”#4a8c3f”},{key:“oligarchs”,name:“Oligarchs”,color:”#9b59b6”}],
-resources:[{key:“legions”,name:“Hoplites”,icon:”\u2694”,mx:10},{key:“wealth”,name:“Treasury”,icon:”\u25C6”,mx:10},{key:“offices”,name:“Influence”,icon:”\u269C”,mx:10},{key:“intel”,name:“Intel”,icon:”\u25C8”,mx:10}],
+ctx:"Player is Roman general Flavius Marcellinus, 410 AD, as Alaric threatens Rome. KEY FIGURES: Alaric, Emperor Honorius(Ravenna), Stilicho(executed), Galla Placidia, Athaulf, Pope Innocent I. FACTIONS: Imperial Court(Honorius/bureaucrats), Roman Army(depleted/mixed), The Church(growing power), Barbarian Leaders(Alaric/Goths). RESOURCES: legions(troops), wealth(treasury), offices(imperial authority), intel. Player commands 5000 troops, rank of comes rei militaris."},
+{id:"pelop",title:"The Peloponnesian War",sub:"Athens, 431 BC",
+desc:"Athens and Sparta are at war. You are an Athenian general elected by the assembly.",
+factions:[{key:"assembly",name:"The Assembly",color:"#2a6aaa"},{key:"navy",name:"Athenian Navy",color:"#c13b1b"},{key:"league",name:"Delian League",color:"#4a8c3f"},{key:"oligarchs",name:"Oligarchs",color:"#9b59b6"}],
+resources:[{key:"legions",name:"Hoplites",icon:"\u2694",mx:10},{key:"wealth",name:"Treasury",icon:"\u25C6",mx:10},{key:"offices",name:"Influence",icon:"\u269C",mx:10},{key:"intel",name:"Intel",icon:"\u25C8",mx:10}],
 startF:{assembly:50,navy:50,league:40,oligarchs:30},startR:{legions:3,wealth:5,offices:5,intel:3},
-ctx:“Player is Athenian strategos Demetrios of Alopece, 431 BC. KEY FIGURES: Pericles, Cleon, Nicias, Alcibiades, Brasidas, Lysander. FACTIONS: The Assembly(democratic voters), Athenian Navy(triremes), Delian League(tribute allies), Oligarchs(wealthy Spartaphiles). RESOURCES: legions(hoplites), wealth(treasury), offices(political influence), intel. KEY: Plague, Sicilian Expedition, oligarchic coup. Player starts as new strategos with naval experience.”}
+ctx:"Player is Athenian strategos Demetrios of Alopece, 431 BC. KEY FIGURES: Pericles, Cleon, Nicias, Alcibiades, Brasidas, Lysander. FACTIONS: The Assembly(democratic voters), Athenian Navy(triremes), Delian League(tribute allies), Oligarchs(wealthy Spartaphiles). RESOURCES: legions(hoplites), wealth(treasury), offices(political influence), intel. KEY: Plague, Sicilian Expedition, oligarchic coup. Player starts as new strategos with naval experience."}
 ];
 
 const SYS=`You are the game master for a deeply strategic alternate history game. Generate immersive scenarios where choices have lasting consequences.
 
 THE GAME TRACKS:
-
 - FACTION REPUTATIONS (0-100 each): Standing with each major faction. Actions pleasing one faction often anger another. Below 20 = hostile. Above 75 = strong ally.
 - RESOURCES: legions(military force), wealth(money), offices(political authority), intel(spies/information). These affect what the player can attempt.
 - HISTORY: Every past choice/outcome. You MUST reference previous events. Allies made, enemies created, promises kept or broken.
 
 CRITICAL RULES:
-
 1. ONLY valid JSON. No markdown, no backticks.
-1. Each choice has hidden “probability” (1-95). Player NEVER sees this. Base on: plausibility, faction scores, resources, past consequences.
-1. Each choice has visible “risk_level”: “low”,“moderate”,“high”,“desperate”.
-1. 3-4 choices representing different STRATEGIES. At least one political, at least one using resources. If player lacks resources for an option, don’t offer it.
-1. Every outcome MUST include “fc_s”/“fc_f” (faction changes on success/failure) and “rc_s”/“rc_f” (resource changes). Format: {“caesarian”:10,“optimate”:-15} and {“legions”:1,“wealth”:-2}.
-1. CONSEQUENCES ECHO: Reference specific past events. Betrayals come back. Investments pay off. Alliances tested. This is the CORE of strategic gameplay.
-1. If faction <20, they work AGAINST player. If >75, unique opportunities. Show this in narrative.
-1. NEVER kill player in success_outcome or failure_outcome. Player dies ONLY when is_final=true with defeat_narrative. Outcomes can wound/imprison/endanger but player survives.
-1. If ALL factions below 20 AND resources depleted, set is_final=true with defeat_narrative. Otherwise always give a chance.
-1. Average of all faction scores = overall standing. Above 85 average = player may declare victory. Generate scenarios reflecting dominance but with new threats.
-1. NEVER repeat scenarios. Always advance timeline.
-1. Write narrative in second person, 2-3 paragraphs, grounded in historical detail.
-1. Open-ended alternate history. Don’t railroad toward known outcomes.
+2. Each choice has hidden "probability" (1-95). Player NEVER sees this. Base on: plausibility, faction scores, resources, past consequences.
+3. Each choice has visible "risk_level": "low","moderate","high","desperate".
+4. 3-4 choices representing different STRATEGIES. At least one political, at least one using resources. If player lacks resources for an option, don't offer it.
+5. Every outcome MUST include "fc_s"/"fc_f" (faction changes on success/failure) and "rc_s"/"rc_f" (resource changes). Format: {"caesarian":10,"optimate":-15} and {"legions":1,"wealth":-2}.
+6. CONSEQUENCES ECHO: Reference specific past events. Betrayals come back. Investments pay off. Alliances tested. This is the CORE of strategic gameplay.
+7. If faction <20, they work AGAINST player. If >75, unique opportunities. Show this in narrative.
+8. NEVER kill player in success_outcome or failure_outcome. Player dies ONLY when is_final=true with defeat_narrative. Outcomes can wound/imprison/endanger but player survives.
+9. If ALL factions below 20 AND resources depleted, set is_final=true with defeat_narrative. Otherwise always give a chance.
+10. Average of all faction scores = overall standing. Above 85 average = player may declare victory. Generate scenarios reflecting dominance but with new threats.
+11. NEVER repeat scenarios. Always advance timeline.
+12. Write narrative in second person, 2-3 paragraphs, grounded in historical detail.
+13. Open-ended alternate history. Don't railroad toward known outcomes.
 
 JSON FORMAT:
-{“year”:“string”,“title”:“string”,“narrative”:“string”,“standing_summary”:“string”,“choices”:[{“id”:“a”,“text”:“string”,“probability”:70,“risk_level”:“moderate”,“success_outcome”:“string”,“failure_outcome”:“string”,“fc_s”:{“caesarian”:5},“fc_f”:{“caesarian”:-5},“rc_s”:{“legions”:1},“rc_f”:{“wealth”:-1}}],“is_final”:false,“defeat_narrative”:null}`;
+{"year":"string","title":"string","narrative":"string","standing_summary":"string","choices":[{"id":"a","text":"string","probability":70,"risk_level":"moderate","success_outcome":"string","failure_outcome":"string","fc_s":{"caesarian":5},"fc_f":{"caesarian":-5},"rc_s":{"legions":1},"rc_f":{"wealth":-1}}],"is_final":false,"defeat_narrative":null}`;
 
 function parseJ(raw){
-if(!raw)return null;
-const s=typeof raw===“string”?raw:JSON.stringify(raw);
-const c=s.replace(/`json|`/g,””).trim();
-try{const j=JSON.parse(c);if(j.narrative&&j.choices)return j;if(j.content){const t=j.content.filter(b=>b.type===“text”).map(b=>b.text).join(””);return parseJ(t);}}catch(e){}
-const m=c.match(/{[\s\S]*}/);if(m){try{const j=JSON.parse(m[0]);if(j.narrative||j.epithet)return j;}catch(e){}}return null;
+  if(!raw)return null;
+  const s=typeof raw==="string"?raw:JSON.stringify(raw);
+  const c=s.replace(/```json|```/g,"").trim();
+  try{const j=JSON.parse(c);if(j.narrative&&j.choices)return j;if(j.content){const t=j.content.filter(b=>b.type==="text").map(b=>b.text).join("");return parseJ(t);}}catch(e){}
+  const m=c.match(/\{[\s\S]*\}/);if(m){try{const j=JSON.parse(m[0]);if(j.narrative||j.epithet)return j;}catch(e){}}return null;
 }
 function parseS(raw){
-if(!raw)return null;
-const s=typeof raw===“string”?raw:JSON.stringify(raw);
-const c=s.replace(/`json|`/g,””).trim();
-try{const j=JSON.parse(c);if(j.epithet)return j;if(j.content){const t=j.content.filter(b=>b.type===“text”).map(b=>b.text).join(””);return parseS(t);}}catch(e){}
-const m=c.match(/{[\s\S]*}/);if(m){try{const j=JSON.parse(m[0]);if(j.epithet)return j;}catch(e){}}return null;
+  if(!raw)return null;
+  const s=typeof raw==="string"?raw:JSON.stringify(raw);
+  const c=s.replace(/```json|```/g,"").trim();
+  try{const j=JSON.parse(c);if(j.epithet)return j;if(j.content){const t=j.content.filter(b=>b.type==="text").map(b=>b.text).join("");return parseS(t);}}catch(e){}
+  const m=c.match(/\{[\s\S]*\}/);if(m){try{const j=JSON.parse(m[0]);if(j.epithet)return j;}catch(e){}}return null;
 }
 
 async function api(sys,msg){
-for(let a=0;a<3;a++){
-try{
-if(a>0)await new Promise(r=>setTimeout(r,2000));
-const r=await fetch(”/api/generate”,{method:“POST”,headers:{“Content-Type”:“application/json”},body:JSON.stringify({system:sys,messages:[{role:“user”,content:msg}]})});
-if(r.status===429){await new Promise(r=>setTimeout(r,5000));continue;}
-if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||e.errorDetail||`HTTP ${r.status}`);}
-return await r.json();
-}catch(e){if(a===2)return{_error:e.message};}
-}return{_error:“Failed”};
+  for(let a=0;a<3;a++){
+    try{
+      if(a>0)await new Promise(r=>setTimeout(r,2000));
+      const r=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,messages:[{role:"user",content:msg}]})});
+      if(r.status===429){await new Promise(r=>setTimeout(r,5000));continue;}
+      if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||e.errorDetail||`HTTP ${r.status}`);}
+      return await r.json();
+    }catch(e){if(a===2)return{_error:e.message};}
+  }return{_error:"Failed"};
 }
 
 async function gen(sc,hist,fac,res,setSt){
-const recent=hist.slice(-8);
-const h=recent.length>0?recent.map(x=>`[${x.year}] ${x.title}: "${x.choice}" -> ${x.ok?"SUCCESS":"FAILURE"}: ${x.outcome}`).join(”\n”):“First turn.”;
-const fs=sc.factions.map(f=>`${f.name}(${f.key}):${fac[f.key]}`).join(”, “);
-const rs=sc.resources.map(r=>`${r.name}(${r.key}):${res[r.key]}/${r.mx}`).join(”, “);
-setSt(“The threads of fate are weaving…”);
-const d=await api(SYS,`${sc.ctx}\n\nFACTIONS: ${fs}\nRESOURCES: ${rs}\nFACTION KEYS: ${sc.factions.map(f=>f.key).join(",")}\nRESOURCE KEYS: legions,wealth,offices,intel\n\nHISTORY (${hist.length} turns):\n${h}\n\nGenerate next scenario. Include fc_s,fc_f,rc_s,rc_f for each choice. Reference past events. JSON only.`);
-if(d._error)return d;const s=parseJ(d);return s||{_error:“Parse failed: “+JSON.stringify(d).slice(0,200)};
+  const recent=hist.slice(-8);
+  const h=recent.length>0?recent.map(x=>`[${x.year}] ${x.title}: "${x.choice}" -> ${x.ok?"SUCCESS":"FAILURE"}: ${x.outcome}`).join("\n"):"First turn.";
+  const fs=sc.factions.map(f=>`${f.name}(${f.key}):${fac[f.key]}`).join(", ");
+  const rs=sc.resources.map(r=>`${r.name}(${r.key}):${res[r.key]}/${r.mx}`).join(", ");
+  setSt("The threads of fate are weaving...");
+  const d=await api(SYS,`${sc.ctx}\n\nFACTIONS: ${fs}\nRESOURCES: ${rs}\nFACTION KEYS: ${sc.factions.map(f=>f.key).join(",")}\nRESOURCE KEYS: legions,wealth,offices,intel\n\nHISTORY (${hist.length} turns):\n${h}\n\nGenerate next scenario. Include fc_s,fc_f,rc_s,rc_f for each choice. Reference past events. JSON only.`);
+  if(d._error)return d;const s=parseJ(d);return s||{_error:"Parse failed: "+JSON.stringify(d).slice(0,200)};
 }
 async function score(sc,hist,fac,won){
-const h=hist.map((x,i)=>`T${i+1}[${x.year}]${x.title}:"${x.choice}"->${x.ok?"OK":"FAIL"}:${x.outcome}`).join(”\n”);
-const d=await api(SPROMPT,`SCENARIO:${sc.title}\nHISTORY:\n${h}\nFACTIONS:${JSON.stringify(fac)}\nOUTCOME:${won?"Victory":"Defeat"}\nTURNS:${hist.length}\nScore. JSON only.`);
-if(d._error)return null;return parseS(d);
+  const h=hist.map((x,i)=>`T${i+1}[${x.year}]${x.title}:"${x.choice}"->${x.ok?"OK":"FAIL"}:${x.outcome}`).join("\n");
+  const d=await api(SPROMPT,`SCENARIO:${sc.title}\nHISTORY:\n${h}\nFACTIONS:${JSON.stringify(fac)}\nOUTCOME:${won?"Victory":"Defeat"}\nTURNS:${hist.length}\nScore. JSON only.`);
+  if(d._error)return null;return parseS(d);
 }
 
-function getLB(){try{return JSON.parse(localStorage.getItem(“fortuna_lb”)||”[]”);}catch(e){return[];}}
-function saveLB(e){const lb=getLB();lb.unshift(e);if(lb.length>50)lb.length=50;try{localStorage.setItem(“fortuna_lb”,JSON.stringify(lb));}catch(e){}}
+function getLB(){try{return JSON.parse(localStorage.getItem("fortuna_lb")||"[]");}catch(e){return[];}}
+function saveLB(e){const lb=getLB();lb.unshift(e);if(lb.length>50)lb.length=50;try{localStorage.setItem("fortuna_lb",JSON.stringify(lb));}catch(e){}}
 
-// — UI Components —
+// --- UI Components ---
 function Btn({children,onClick,small,green,disabled}){
-const[h,setH]=useState(false);const b=green?T.greenB:T.gold;
-return <button onClick={onClick} disabled={disabled} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
-style={{padding:small?“8px 24px”:“12px 40px”,background:h&&!disabled?b:“transparent”,border:`1px solid ${b}`,color:h&&!disabled?T.bg:b,fontFamily:”‘Cinzel’,serif”,fontSize:small?“0.75rem”:“0.85rem”,letterSpacing:“0.15em”,cursor:disabled?“default”:“pointer”,transition:“all 0.2s”,display:“block”,margin:“0 auto”,opacity:disabled?0.5:1}}>{children}</button>;
+  const[h,setH]=useState(false);const b=green?T.greenB:T.gold;
+  return <button onClick={onClick} disabled={disabled} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
+    style={{padding:small?"8px 24px":"12px 40px",background:h&&!disabled?b:"transparent",border:`1px solid ${b}`,color:h&&!disabled?T.bg:b,fontFamily:"'Cinzel',serif",fontSize:small?"0.75rem":"0.85rem",letterSpacing:"0.15em",cursor:disabled?"default":"pointer",transition:"all 0.2s",display:"block",margin:"0 auto",opacity:disabled?0.5:1}}>{children}</button>;
 }
 
 function FactionBars({sc,fac}){
-return <div style={{marginBottom:10}}>
-<p style={{color:T.goldD,fontSize:“0.7rem”,letterSpacing:“0.1em”,marginBottom:5}}>FACTIONS</p>
-{sc.factions.map(f=>{const v=Math.max(0,Math.min(100,fac[f.key]||0));const bad=v<20;const good=v>75;
-return <div key={f.key} style={{marginBottom:3}}>
-<div style={{display:“flex”,justifyContent:“space-between”,marginBottom:1}}>
-<span style={{color:bad?”#ff4444”:good?T.greenB:f.color,fontSize:“0.72rem”,fontFamily:”‘Cinzel’,serif”,transition:“color 0.3s”}}>{f.name}{bad?” \u26A0”:””}</span>
-<span style={{color:T.creamD,fontSize:“0.68rem”}}>{v}</span>
-</div>
-<div style={{width:“100%”,height:3,background:T.bdr,borderRadius:2}}>
-<div style={{width:`${v}%`,height:“100%”,background:bad?”#ff4444”:good?T.greenB:f.color,borderRadius:2,transition:“all 0.5s”}}/>
-</div>
-</div>;})}
-
+  return <div style={{marginBottom:10}}>
+    <p style={{color:T.goldD,fontSize:"0.7rem",letterSpacing:"0.1em",marginBottom:5}}>FACTIONS</p>
+    {sc.factions.map(f=>{const v=Math.max(0,Math.min(100,fac[f.key]||0));const bad=v<20;const good=v>75;
+      return <div key={f.key} style={{marginBottom:3}}>
+        <div style={{display:"flex",justifyContent:"space-between",marginBottom:1}}>
+          <span style={{color:bad?"#ff4444":good?T.greenB:f.color,fontSize:"0.72rem",fontFamily:"'Cinzel',serif",transition:"color 0.3s"}}>{f.name}{bad?" \u26A0":""}</span>
+          <span style={{color:T.creamD,fontSize:"0.68rem"}}>{v}</span>
+        </div>
+        <div style={{width:"100%",height:3,background:T.bdr,borderRadius:2}}>
+          <div style={{width:`${v}%`,height:"100%",background:bad?"#ff4444":good?T.greenB:f.color,borderRadius:2,transition:"all 0.5s"}}/>
+        </div>
+      </div>;})}
   </div>;
 }
 
 function ResBars({sc,res}){
-return <div style={{marginBottom:10}}>
-<p style={{color:T.goldD,fontSize:“0.7rem”,letterSpacing:“0.1em”,marginBottom:5}}>RESOURCES</p>
-<div style={{display:“grid”,gridTemplateColumns:“1fr 1fr”,gap:“3px 14px”}}>
-{sc.resources.map(r=>{const v=Math.max(0,Math.min(r.mx,res[r.key]||0));
-return <div key={r.key} style={{display:“flex”,alignItems:“center”,gap:5}}>
-<span style={{fontSize:“0.75rem”}}>{r.icon}</span>
-<span style={{color:T.creamD,fontSize:“0.7rem”,fontFamily:”‘Cinzel’,serif”,minWidth:42}}>{r.name}</span>
-<div style={{flex:1,height:3,background:T.bdr,borderRadius:2}}>
-<div style={{width:`${(v/r.mx)*100}%`,height:“100%”,background:v<=1?T.redB:v<=3?T.gold:T.greenB,borderRadius:2,transition:“all 0.5s”}}/>
-</div>
-<span style={{color:T.creamD,fontSize:“0.63rem”,minWidth:14,textAlign:“right”}}>{v}</span>
-</div>;})}
-</div>
-
+  return <div style={{marginBottom:10}}>
+    <p style={{color:T.goldD,fontSize:"0.7rem",letterSpacing:"0.1em",marginBottom:5}}>RESOURCES</p>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"3px 14px"}}>
+      {sc.resources.map(r=>{const v=Math.max(0,Math.min(r.mx,res[r.key]||0));
+        return <div key={r.key} style={{display:"flex",alignItems:"center",gap:5}}>
+          <span style={{fontSize:"0.75rem"}}>{r.icon}</span>
+          <span style={{color:T.creamD,fontSize:"0.7rem",fontFamily:"'Cinzel',serif",minWidth:42}}>{r.name}</span>
+          <div style={{flex:1,height:3,background:T.bdr,borderRadius:2}}>
+            <div style={{width:`${(v/r.mx)*100}%`,height:"100%",background:v<=1?T.redB:v<=3?T.gold:T.greenB,borderRadius:2,transition:"all 0.5s"}}/>
+          </div>
+          <span style={{color:T.creamD,fontSize:"0.63rem",minWidth:14,textAlign:"right"}}>{v}</span>
+        </div>;})}
+    </div>
   </div>;
 }
 
 function AvgBar({fac,defs}){
-const avg=Math.round(defs.reduce((s,f)=>s+(fac[f.key]||0),0)/defs.length);
-const c=avg<25?T.redB:avg<50?T.gold:T.greenB;
-return <div style={{marginBottom:6}}>
-<div style={{display:“flex”,justifyContent:“space-between”,marginBottom:2}}>
-<span style={{color:T.goldD,fontSize:“0.7rem”,letterSpacing:“0.1em”}}>STANDING</span>
-<span style={{color:T.cream,fontFamily:”‘Cinzel’,serif”,fontSize:“0.72rem”}}>{avg}/100</span>
-</div>
-<div style={{width:“100%”,height:4,background:T.bdr,borderRadius:2}}>
-<div style={{width:`${avg}%`,height:“100%”,background:c,borderRadius:2,transition:“all 0.5s”}}/>
-</div>
-
+  const avg=Math.round(defs.reduce((s,f)=>s+(fac[f.key]||0),0)/defs.length);
+  const c=avg<25?T.redB:avg<50?T.gold:T.greenB;
+  return <div style={{marginBottom:6}}>
+    <div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}>
+      <span style={{color:T.goldD,fontSize:"0.7rem",letterSpacing:"0.1em"}}>STANDING</span>
+      <span style={{color:T.cream,fontFamily:"'Cinzel',serif",fontSize:"0.72rem"}}>{avg}/100</span>
+    </div>
+    <div style={{width:"100%",height:4,background:T.bdr,borderRadius:2}}>
+      <div style={{width:`${avg}%`,height:"100%",background:c,borderRadius:2,transition:"all 0.5s"}}/>
+    </div>
   </div>;
 }
 
 function Dice({onDone}){
-const[rolling,setR]=useState(true);const[face,setF]=useState(50);
-useEffect(()=>{let n=0;const iv=setInterval(()=>{n++;setF(Math.floor(Math.random()*100)+1);if(n>=22){clearInterval(iv);setR(false);setTimeout(()=>onDone(),800);}},80);return()=>clearInterval(iv);},[]);
-return <div style={{textAlign:“center”,padding:“32px 0”}}>
-<p style={{color:T.goldD,fontSize:“0.9rem”,marginBottom:12,fontStyle:“italic”}}>Fortune decides…</p>
-<div style={{width:100,height:100,margin:“0 auto”,border:`2px solid ${T.goldD}`,borderRadius:12,display:“flex”,alignItems:“center”,justifyContent:“center”,background:T.card,animation:rolling?“shake 0.1s infinite”:“none”}}>
-<span style={{fontFamily:”‘Cinzel’,serif”,fontSize:“2rem”,fontWeight:700,color:T.gold}}>{face}</span>
-</div>
-
+  const[rolling,setR]=useState(true);const[face,setF]=useState(50);
+  useEffect(()=>{let n=0;const iv=setInterval(()=>{n++;setF(Math.floor(Math.random()*100)+1);if(n>=22){clearInterval(iv);setR(false);setTimeout(()=>onDone(),800);}},80);return()=>clearInterval(iv);},[]);
+  return <div style={{textAlign:"center",padding:"32px 0"}}>
+    <p style={{color:T.goldD,fontSize:"0.9rem",marginBottom:12,fontStyle:"italic"}}>Fortune decides...</p>
+    <div style={{width:100,height:100,margin:"0 auto",border:`2px solid ${T.goldD}`,borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center",background:T.card,animation:rolling?"shake 0.1s infinite":"none"}}>
+      <span style={{fontFamily:"'Cinzel',serif",fontSize:"2rem",fontWeight:700,color:T.gold}}>{face}</span>
+    </div>
   </div>;
 }
 
 function Radar({scores,size=250}){
-const cx=size/2,cy=size/2,r=size*0.35,n=SM.length,step=(2*Math.PI)/n,st=-Math.PI/2;
-const pt=(i,v)=>({x:cx+(v/10)*r*Math.cos(st+i*step),y:cy+(v/10)*r*Math.sin(st+i*step)});
-return <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{display:“block”,margin:“0 auto”}}>
-{[2,4,6,8,10].map((v,i)=><polygon key={i} points={SM.map((*,j)=>{const p=pt(j,v);return`${p.x},${p.y}`;}).join(” “)} fill=“none” stroke={T.bdr} strokeWidth={0.5} opacity={0.6}/>)}
-{SM.map((*,i)=>{const p=pt(i,10);return <path key={i} d={`M${cx},${cy} L${p.x},${p.y}`} stroke={T.bdr} strokeWidth={0.5} opacity={0.4}/>;})}
-<polygon points={SM.map((m,i)=>{const p=pt(i,scores[m.key]||0);return`${p.x},${p.y}`;}).join(” “)} fill=“rgba(201,168,76,0.15)” stroke={T.gold} strokeWidth={1.5}/>
-{SM.map((m,i)=>{const p=pt(i,scores[m.key]||0);return <circle key={i} cx={p.x} cy={p.y} r={3} fill={m.color}/>;})}
-{SM.map((m,i)=>{const p=pt(i,11.5);return <text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fill={m.color} fontSize="8" fontFamily="Cinzel,serif" fontWeight="700">{m.label.toUpperCase()}</text>;})}
-</svg>;
+  const cx=size/2,cy=size/2,r=size*0.35,n=SM.length,step=(2*Math.PI)/n,st=-Math.PI/2;
+  const pt=(i,v)=>({x:cx+(v/10)*r*Math.cos(st+i*step),y:cy+(v/10)*r*Math.sin(st+i*step)});
+  return <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{display:"block",margin:"0 auto"}}>
+    {[2,4,6,8,10].map((v,i)=><polygon key={i} points={SM.map((_,j)=>{const p=pt(j,v);return`${p.x},${p.y}`;}).join(" ")} fill="none" stroke={T.bdr} strokeWidth={0.5} opacity={0.6}/>)}
+    {SM.map((_,i)=>{const p=pt(i,10);return <path key={i} d={`M${cx},${cy} L${p.x},${p.y}`} stroke={T.bdr} strokeWidth={0.5} opacity={0.4}/>;})}
+    <polygon points={SM.map((m,i)=>{const p=pt(i,scores[m.key]||0);return`${p.x},${p.y}`;}).join(" ")} fill="rgba(201,168,76,0.15)" stroke={T.gold} strokeWidth={1.5}/>
+    {SM.map((m,i)=>{const p=pt(i,scores[m.key]||0);return <circle key={i} cx={p.x} cy={p.y} r={3} fill={m.color}/>;})}
+    {SM.map((m,i)=>{const p=pt(i,11.5);return <text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fill={m.color} fontSize="8" fontFamily="Cinzel,serif" fontWeight="700">{m.label.toUpperCase()}</text>;})}
+  </svg>;
 }
 
 function LBView({onBack}){
-const lb=getLB();
-return <div style={{maxWidth:640,margin:“0 auto”,padding:“40px 24px”}}>
-<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“center”,marginBottom:32}}>
-<h2 style={{fontFamily:”‘Cinzel’,serif”,color:T.gold,fontSize:“1.4rem”,fontWeight:700,letterSpacing:“0.1em”}}>HALL OF FAME</h2>
-<Btn onClick={onBack} small>BACK</Btn>
-</div>
-{lb.length===0&&<p style={{color:T.creamD,textAlign:“center”,fontStyle:“italic”,padding:“40px 0”}}>No games completed yet.</p>}
-{lb.map((e,i)=><div key={i} style={{background:T.card,border:`1px solid ${T.bdr}`,borderRadius:4,padding:“14px 18px”,marginBottom:10}}>
-<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“baseline”,marginBottom:4}}>
-<span style={{fontFamily:”‘Cinzel’,serif”,color:T.gold,fontSize:“0.95rem”,fontWeight:700}}>{e.epithet||”?”}</span>
-<span style={{color:T.creamD,fontSize:“0.75rem”}}>{e.scenario} {e.turns}t</span>
-</div>
-<p style={{color:T.cream,fontSize:“0.85rem”,lineHeight:1.5,marginBottom:6}}>{e.summary||””}</p>
-<div style={{display:“flex”,gap:6,flexWrap:“wrap”}}>
-{SM.map(m=><span key={m.key} style={{fontSize:“0.65rem”,color:m.color,fontFamily:”‘Cinzel’,serif”}}>{m.label.slice(0,3).toUpperCase()}{e.scores?.[m.key]||”?”}</span>)}
-</div>
-<div style={{display:“flex”,justifyContent:“space-between”,marginTop:4}}>
-<span style={{fontSize:“0.7rem”,color:e.victory?T.greenB:T.redB}}>{e.victory?“VICTORY”:“DEFEAT”}</span>
-<span style={{fontSize:“0.65rem”,color:T.creamD}}>{e.date||””}</span>
-</div>
-</div>)}
-
+  const lb=getLB();
+  return <div style={{maxWidth:640,margin:"0 auto",padding:"40px 24px"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:32}}>
+      <h2 style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"1.4rem",fontWeight:700,letterSpacing:"0.1em"}}>HALL OF FAME</h2>
+      <Btn onClick={onBack} small>BACK</Btn>
+    </div>
+    {lb.length===0&&<p style={{color:T.creamD,textAlign:"center",fontStyle:"italic",padding:"40px 0"}}>No games completed yet.</p>}
+    {lb.map((e,i)=><div key={i} style={{background:T.card,border:`1px solid ${T.bdr}`,borderRadius:4,padding:"14px 18px",marginBottom:10}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:4}}>
+        <span style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"0.95rem",fontWeight:700}}>{e.epithet||"?"}</span>
+        <span style={{color:T.creamD,fontSize:"0.75rem"}}>{e.scenario} {e.turns}t</span>
+      </div>
+      <p style={{color:T.cream,fontSize:"0.85rem",lineHeight:1.5,marginBottom:6}}>{e.summary||""}</p>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+        {SM.map(m=><span key={m.key} style={{fontSize:"0.65rem",color:m.color,fontFamily:"'Cinzel',serif"}}>{m.label.slice(0,3).toUpperCase()}{e.scores?.[m.key]||"?"}</span>)}
+      </div>
+      <div style={{display:"flex",justifyContent:"space-between",marginTop:4}}>
+        <span style={{fontSize:"0.7rem",color:e.victory?T.greenB:T.redB}}>{e.victory?"VICTORY":"DEFEAT"}</span>
+        <span style={{fontSize:"0.65rem",color:T.creamD}}>{e.date||""}</span>
+      </div>
+    </div>)}
   </div>;
 }
 
 function End({sc,hist,fac,res,won,defText,onNew,onLB}){
-const[scores,setScores]=useState(null);const[loading,setL]=useState(true);const[saved,setSaved]=useState(false);
-useEffect(()=>{(async()=>{
-const r=await score(sc,hist,fac,won);
-if(r?.epithet){setScores(r);saveLB({epithet:r.epithet,summary:r.summary,scores:{glory:r.glory,boldness:r.boldness,cunning:r.cunning,virtue:r.virtue,ruthlessness:r.ruthlessness,plausibility:r.plausibility,novelty:r.novelty},scenario:sc.title,turns:hist.length,standing:Math.round(sc.factions.reduce((s,f)=>s+(fac[f.key]||0),0)/sc.factions.length),victory:won,date:new Date().toLocaleDateString()});setSaved(true);}
-setL(false);
-})();},[]);
-const dead=!won;
-return <div style={{maxWidth:580,margin:“0 auto”,padding:“40px 24px 80px”,textAlign:“center”}}>
-<div style={{color:dead?T.redB:T.gold,fontSize:“2.5rem”,marginBottom:14}}>{dead?”\u271D”:”\u2726”}</div>
-<h1 style={{fontFamily:”‘Cinzel’,serif”,color:dead?T.redB:T.gold,fontSize:“1.7rem”,fontWeight:700,letterSpacing:“0.12em”,marginBottom:14}}>{dead?“YOUR STORY ENDS”:“VICTORY”}</h1>
-{dead&&defText&&<p style={{fontSize:“1rem”,maxWidth:480,lineHeight:1.8,margin:“0 auto 14px”}}>{defText}</p>}
-{!dead&&<p style={{fontSize:“1rem”,maxWidth:480,lineHeight:1.8,margin:“0 auto 14px”}}>After {hist.length} turns, you have emerged from the crucible of history.</p>}
-{loading&&<div style={{padding:“36px 0”}}><div style={{color:T.gold,fontSize:“1.5rem”,marginBottom:10,animation:“pulse 1.5s infinite”}}>{”\u2726”}</div><p style={{color:T.creamD,fontStyle:“italic”}}>The historians render judgment…</p></div>}
-{!loading&&scores&&<>
-<div style={{width:50,height:1,background:T.goldD,margin:“0 auto 20px”}}/>
-<h2 style={{fontFamily:”‘Cinzel’,serif”,color:T.gold,fontSize:“1.2rem”,fontWeight:700,marginBottom:4}}>{scores.epithet}</h2>
-<p style={{color:T.cream,fontSize:“0.95rem”,fontStyle:“italic”,lineHeight:1.6,maxWidth:460,margin:“0 auto 20px”}}>{scores.summary}</p>
-<Radar scores={scores}/>
-<div style={{display:“grid”,gridTemplateColumns:“1fr 1fr”,gap:“4px 14px”,maxWidth:360,margin:“14px auto”}}>
-{SM.map(m=><div key={m.key} style={{display:“flex”,justifyContent:“space-between”,padding:“3px 0”,borderBottom:`1px solid ${T.bdr}`}}>
-<span style={{color:m.color,fontSize:“0.8rem”,fontFamily:”‘Cinzel’,serif”}}>{m.label}</span>
-<span style={{color:T.cream,fontSize:“0.9rem”,fontFamily:”‘Cinzel’,serif”,fontWeight:700}}>{scores[m.key]}/10</span>
-</div>)}
-</div>
-<div style={{background:T.card,border:`1px solid ${T.bdr}`,borderRadius:4,padding:“14px 18px”,marginTop:16,textAlign:“left”,maxWidth:460,margin:“16px auto 0”}}>
-<p style={{color:T.cream,fontSize:“0.9rem”,lineHeight:1.7}}>{scores.assessment}</p>
-</div>
-{saved&&<p style={{color:T.goldD,fontSize:“0.75rem”,marginTop:10,fontStyle:“italic”}}>Recorded in the Hall of Fame</p>}
-</>}
-{!loading&&!scores&&<p style={{color:T.creamD,fontSize:“0.85rem”,marginBottom:20,fontStyle:“italic”}}>The historians could not reach a verdict.</p>}
-<div style={{display:“flex”,gap:14,justifyContent:“center”,marginTop:24}}>
-<Btn onClick={onNew}>NEW GAME</Btn><Btn onClick={onLB} small>HALL OF FAME</Btn>
-</div>
-
-  </div>;
-}
-
-// — GAME —
-function Game({sc,onQuit,onLB}){
-const[fac,setFac]=useState({…sc.startF});
-const[res,setRes]=useState({…sc.startR});
-const[turn,setTurn]=useState(0);
-const[scene,setScene]=useState(null);
-const[loading,setLoading]=useState(true);
-const[status,setSt2]=useState(“The threads of fate are weaving…”);
-const[err,setErr]=useState(null);
-const[sel,setSel]=useState(null);
-const[phase,setPhase]=useState(“load”);
-const[outcome,setOutcome]=useState(””);
-const[ok,setOk]=useState(null);
-const[hist,setHist]=useState([]);
-const[defeat,setDefeat]=useState(””);
-const ref=useRef(null);
-const nxt=useRef({hist:[],fac:{},res:{}});
-
-const avg=Math.round(sc.factions.reduce((s,f)=>s+(fac[f.key]||0),0)/sc.factions.length);
-
-const load=async(h,f,r)=>{
-setLoading(true);setPhase(“load”);setSel(null);setOk(null);setOutcome(””);setErr(null);
-const result=await gen(sc,h,f,r,setSt2);
-if(result._error){setErr(result._error);setLoading(false);return;}
-if(result.is_final&&result.defeat_narrative){setDefeat(result.defeat_narrative);setPhase(“defeat”);setLoading(false);return;}
-if(!result.choices?.length){setErr(“No choices generated. Try retry.”);setLoading(false);return;}
-setScene(result);setPhase(“play”);setLoading(false);
-};
-
-useEffect(()=>{load([],sc.startF,sc.startR);},[]);
-useEffect(()=>{if(ref.current)ref.current.scrollTo({top:0,behavior:“smooth”});},[phase,scene]);
-
-const doRoll=()=>{
-const roll=Math.floor(Math.random()*100)+1;
-const success=roll<=sel.probability;
-setOk(success);
-const out=success?sel.success_outcome:sel.failure_outcome;
-setOutcome(out);
-const fc=success?(sel.fc_s||{}):(sel.fc_f||{});
-const newF={…fac};for(const k in fc)newF[k]=Math.max(0,Math.min(100,(newF[k]||0)+(fc[k]||0)));
-setFac(newF);
-const rc=success?(sel.rc_s||{}):(sel.rc_f||{});
-const newR={…res};const mx={};sc.resources.forEach(r=>mx[r.key]=r.mx);
-for(const k in rc)newR[k]=Math.max(0,Math.min(mx[k]||10,(newR[k]||0)+(rc[k]||0)));
-setRes(newR);
-const entry={year:scene.year,title:scene.title,choice:sel.text,ok:success,outcome:out,risk:sel.risk_level};
-const nh=[…hist,entry];setHist(nh);setTurn(t=>t+1);
-nxt.current={hist:nh,fac:newF,res:newR};setPhase(“outcome”);
-};
-
-if(phase===“victory”||phase===“defeat”)return <End sc={sc} hist={hist} fac={fac} res={res} won={phase===“victory”} defText={defeat} onNew={onQuit} onLB={onLB}/>;
-
-return <div ref={ref} style={{maxWidth:720,margin:“0 auto”,padding:“24px 24px 80px”}}>
-<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“center”,marginBottom:14,borderBottom:`1px solid ${T.bdr}`,paddingBottom:10}}>
-<div>
-<span style={{color:T.goldD,fontSize:“0.78rem”,letterSpacing:“0.1em”}}>{sc.title.toUpperCase()}</span>
-{scene&&<><span style={{color:T.bdr,margin:“0 8px”}}>·</span><span style={{color:T.creamD,fontSize:“0.78rem”}}>{scene.year}</span></>}
-</div>
-<div style={{display:“flex”,alignItems:“center”,gap:14}}>
-<span style={{color:T.creamD,fontSize:“0.78rem”}}>Turn {turn+1}</span>
-<button onClick={onQuit} style={{background:“none”,border:`1px solid ${T.bdr}`,color:T.creamD,fontSize:“0.72rem”,padding:“3px 9px”,cursor:“pointer”,borderRadius:3,fontFamily:”‘Cormorant Garamond’,serif”}}>Quit</button>
-</div>
-</div>
-
-```
-<AvgBar fac={fac} defs={sc.factions}/>
-<FactionBars sc={sc} fac={fac}/>
-<ResBars sc={sc} res={res}/>
-
-{loading&&<div style={{textAlign:"center",padding:"60px 0"}}><div style={{color:T.gold,fontSize:"1.5rem",marginBottom:14,animation:"pulse 1.5s infinite"}}>{"\u2726"}</div><p style={{color:T.creamD,fontSize:"1rem",fontStyle:"italic"}}>{status}</p></div>}
-
-{err&&<div style={{textAlign:"center",padding:"30px 14px"}}><p style={{color:T.redB,marginBottom:10,fontSize:"0.9rem"}}>Scenario generation failed.</p><p style={{color:T.creamD,fontSize:"0.78rem",marginBottom:16,wordBreak:"break-word"}}>{err}</p><Btn onClick={()=>load(hist,fac,res)} small>RETRY</Btn></div>}
-
-{!loading&&!err&&scene&&<>
-  <h2 style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"1.4rem",fontWeight:700,marginTop:16,marginBottom:6,letterSpacing:"0.08em"}}>{scene.title}</h2>
-  {scene.standing_summary&&<p style={{color:T.creamD,fontSize:"0.88rem",fontStyle:"italic",marginBottom:20}}>{scene.standing_summary}</p>}
-  <p style={{whiteSpace:"pre-wrap",lineHeight:1.8,fontSize:"1.05rem",marginBottom:28}}>{scene.narrative}</p>
-
-  {avg>=85&&phase==="play"&&<div style={{background:"rgba(45,90,39,0.12)",border:`1px solid ${T.green}`,borderRadius:4,padding:14,marginBottom:20,textAlign:"center"}}>
-    <p style={{color:T.greenB,fontFamily:"'Cinzel',serif",fontSize:"0.78rem",letterSpacing:"0.1em",marginBottom:10}}>YOUR POSITION IS DOMINANT — Declare victory or press your fortune.</p>
-    <Btn onClick={()=>setPhase("victory")} small green>DECLARE VICTORY</Btn>
-  </div>}
-
-  {(phase==="play"||phase==="rolling"||phase==="outcome")&&scene.choices&&<div style={{marginTop:6}}>
-    <p style={{color:T.goldB,fontFamily:"'Cinzel',serif",fontSize:"0.78rem",letterSpacing:"0.15em",marginBottom:14,textTransform:"uppercase"}}>What do you do?</p>
-    {scene.choices.map(c=>{
-      const s=sel?.id===c.id;
-      const rc=c.risk_level==="desperate"?"#ff4444":c.risk_level==="high"?T.redB:c.risk_level==="moderate"?T.gold:T.greenB;
-      return <button key={c.id} onClick={()=>{if(phase==="play"){setSel(c);setPhase("rolling");}}}
-        disabled={phase!=="play"}
-        style={{display:"block",width:"100%",padding:"14px 18px",marginBottom:10,background:s?T.cardH:T.card,border:`1px solid ${s?T.gold:T.bdr}`,borderRadius:4,color:T.cream,fontSize:"1rem",fontFamily:"'Cormorant Garamond',serif",textAlign:"left",cursor:phase==="play"?"pointer":"default",transition:"all 0.2s",lineHeight:1.6}}>
-        <div style={{marginBottom:6}}>{c.text}</div>
-        <span style={{fontSize:"0.68rem",letterSpacing:"0.08em",textTransform:"uppercase",color:rc,fontFamily:"'Cinzel',serif"}}>{c.risk_level}</span>
-      </button>;
-    })}
-  </div>}
-
-  {phase==="rolling"&&sel&&<Dice onDone={doRoll}/>}
-  {phase==="outcome"&&<div style={{marginTop:20,animation:"fadeIn 0.4s"}}>
-    <p style={{fontFamily:"'Cinzel',serif",fontSize:"1.05rem",fontWeight:700,letterSpacing:"0.15em",marginBottom:14,textAlign:"center",color:ok?T.greenB:T.redB}}>{ok?"FORTUNE FAVORS YOU":"THE FATES ARE CRUEL"}</p>
-    <div style={{background:ok?"rgba(45,90,39,0.12)":"rgba(139,37,0,0.12)",border:`1px solid ${ok?T.green:T.red}`,borderRadius:4,padding:18,marginBottom:20}}>
-      <p style={{color:T.cream,fontSize:"1rem",lineHeight:1.75}}>{outcome}</p>
+  const[scores,setScores]=useState(null);const[loading,setL]=useState(true);const[saved,setSaved]=useState(false);
+  useEffect(()=>{(async()=>{
+    const r=await score(sc,hist,fac,won);
+    if(r?.epithet){setScores(r);saveLB({epithet:r.epithet,summary:r.summary,scores:{glory:r.glory,boldness:r.boldness,cunning:r.cunning,virtue:r.virtue,ruthlessness:r.ruthlessness,plausibility:r.plausibility,novelty:r.novelty},scenario:sc.title,turns:hist.length,standing:Math.round(sc.factions.reduce((s,f)=>s+(fac[f.key]||0),0)/sc.factions.length),victory:won,date:new Date().toLocaleDateString()});setSaved(true);}
+    setL(false);
+  })();},[]);
+  const dead=!won;
+  return <div style={{maxWidth:580,margin:"0 auto",padding:"40px 24px 80px",textAlign:"center"}}>
+    <div style={{color:dead?T.redB:T.gold,fontSize:"2.5rem",marginBottom:14}}>{dead?"\u271D":"\u2726"}</div>
+    <h1 style={{fontFamily:"'Cinzel',serif",color:dead?T.redB:T.gold,fontSize:"1.7rem",fontWeight:700,letterSpacing:"0.12em",marginBottom:14}}>{dead?"YOUR STORY ENDS":"VICTORY"}</h1>
+    {dead&&defText&&<p style={{fontSize:"1rem",maxWidth:480,lineHeight:1.8,margin:"0 auto 14px"}}>{defText}</p>}
+    {!dead&&<p style={{fontSize:"1rem",maxWidth:480,lineHeight:1.8,margin:"0 auto 14px"}}>After {hist.length} turns, you have emerged from the crucible of history.</p>}
+    {loading&&<div style={{padding:"36px 0"}}><div style={{color:T.gold,fontSize:"1.5rem",marginBottom:10,animation:"pulse 1.5s infinite"}}>{"\u2726"}</div><p style={{color:T.creamD,fontStyle:"italic"}}>The historians render judgment...</p></div>}
+    {!loading&&scores&&<>
+      <div style={{width:50,height:1,background:T.goldD,margin:"0 auto 20px"}}/>
+      <h2 style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"1.2rem",fontWeight:700,marginBottom:4}}>{scores.epithet}</h2>
+      <p style={{color:T.cream,fontSize:"0.95rem",fontStyle:"italic",lineHeight:1.6,maxWidth:460,margin:"0 auto 20px"}}>{scores.summary}</p>
+      <Radar scores={scores}/>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 14px",maxWidth:360,margin:"14px auto"}}>
+        {SM.map(m=><div key={m.key} style={{display:"flex",justifyContent:"space-between",padding:"3px 0",borderBottom:`1px solid ${T.bdr}`}}>
+          <span style={{color:m.color,fontSize:"0.8rem",fontFamily:"'Cinzel',serif"}}>{m.label}</span>
+          <span style={{color:T.cream,fontSize:"0.9rem",fontFamily:"'Cinzel',serif",fontWeight:700}}>{scores[m.key]}/10</span>
+        </div>)}
+      </div>
+      <div style={{background:T.card,border:`1px solid ${T.bdr}`,borderRadius:4,padding:"14px 18px",marginTop:16,textAlign:"left",maxWidth:460,margin:"16px auto 0"}}>
+        <p style={{color:T.cream,fontSize:"0.9rem",lineHeight:1.7}}>{scores.assessment}</p>
+      </div>
+      {saved&&<p style={{color:T.goldD,fontSize:"0.75rem",marginTop:10,fontStyle:"italic"}}>Recorded in the Hall of Fame</p>}
+    </>}
+    {!loading&&!scores&&<p style={{color:T.creamD,fontSize:"0.85rem",marginBottom:20,fontStyle:"italic"}}>The historians could not reach a verdict.</p>}
+    <div style={{display:"flex",gap:14,justifyContent:"center",marginTop:24}}>
+      <Btn onClick={onNew}>NEW GAME</Btn><Btn onClick={onLB} small>HALL OF FAME</Btn>
     </div>
-    <Btn onClick={()=>load(nxt.current.hist,nxt.current.fac,nxt.current.res)}>CONTINUE</Btn>
-  </div>}
-</>}
-```
-
   </div>;
 }
 
-// — TITLE —
-function Title({onStart,onLB}){
-const[sel,setSel]=useState(null);const lb=getLB();
-return <div style={{minHeight:“100vh”,display:“flex”,flexDirection:“column”,alignItems:“center”,padding:“60px 24px”}}>
-<div style={{marginBottom:18,color:T.goldD,fontSize:“2.5rem”,letterSpacing:“0.3em”}}>{”\u2726”}</div>
-<h1 style={{fontFamily:”‘Cinzel’,serif”,color:T.gold,fontSize:“2.2rem”,fontWeight:700,letterSpacing:“0.12em”,marginBottom:6,textAlign:“center”}}>FORTUNA</h1>
-<p style={{color:T.creamD,fontSize:“1rem”,fontStyle:“italic”,marginBottom:6}}>A Game of History & Chance</p>
-<div style={{width:50,height:1,background:T.goldD,margin:“14px auto 20px”}}/>
-<p style={{color:T.creamD,fontSize:“1.02rem”,maxWidth:500,lineHeight:1.7,marginBottom:10,textAlign:“center”}}>Step into a pivotal moment in the ancient world. Build alliances, manage resources, and navigate faction politics through alternate history. Every choice shifts the balance of power — and fortune decides the rest.</p>
-<p style={{color:T.goldD,fontSize:“0.88rem”,fontStyle:“italic”,marginBottom:32,textAlign:“center”}}>Alea iacta esto.</p>
-<p style={{color:T.goldB,fontFamily:”‘Cinzel’,serif”,fontSize:“0.78rem”,letterSpacing:“0.15em”,marginBottom:16,textTransform:“uppercase”}}>Choose your era</p>
-<div style={{width:“100%”,maxWidth:540}}>
-{SCENARIOS.map(s=><button key={s.id} onClick={()=>setSel(s)} style={{display:“block”,width:“100%”,padding:“16px 20px”,marginBottom:10,background:sel?.id===s.id?T.cardH:T.card,border:`1px solid ${sel?.id===s.id?T.gold:T.bdr}`,borderRadius:4,textAlign:“left”,cursor:“pointer”,transition:“all 0.2s”,fontFamily:”‘Cormorant Garamond’,serif”}}>
-<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“baseline”,marginBottom:4}}>
-<span style={{fontFamily:”‘Cinzel’,serif”,color:T.gold,fontSize:“0.95rem”,fontWeight:700}}>{s.title}</span>
-<span style={{color:T.goldD,fontSize:“0.82rem”}}>{s.sub}</span>
-</div>
-<p style={{color:T.creamD,fontSize:“0.9rem”,lineHeight:1.5}}>{s.desc}</p>
-</button>)}
-</div>
-<div style={{display:“flex”,gap:14,marginTop:24,animation:sel?“fadeIn 0.3s”:“none”}}>
-{sel&&<Btn onClick={()=>onStart(sel)}>BEGIN</Btn>}
-{lb.length>0&&<Btn onClick={onLB} small>HALL OF FAME</Btn>}
-</div>
+// --- GAME ---
+function Game({sc,onQuit,onLB}){
+  const[fac,setFac]=useState({...sc.startF});
+  const[res,setRes]=useState({...sc.startR});
+  const[turn,setTurn]=useState(0);
+  const[scene,setScene]=useState(null);
+  const[loading,setLoading]=useState(true);
+  const[status,setSt2]=useState("The threads of fate are weaving...");
+  const[err,setErr]=useState(null);
+  const[sel,setSel]=useState(null);
+  const[phase,setPhase]=useState("load");
+  const[outcome,setOutcome]=useState("");
+  const[ok,setOk]=useState(null);
+  const[hist,setHist]=useState([]);
+  const[defeat,setDefeat]=useState("");
+  const ref=useRef(null);
+  const nxt=useRef({hist:[],fac:{},res:{}});
 
+  const avg=Math.round(sc.factions.reduce((s,f)=>s+(fac[f.key]||0),0)/sc.factions.length);
+
+  const load=async(h,f,r)=>{
+    setLoading(true);setPhase("load");setSel(null);setOk(null);setOutcome("");setErr(null);
+    const result=await gen(sc,h,f,r,setSt2);
+    if(result._error){setErr(result._error);setLoading(false);return;}
+    if(result.is_final&&result.defeat_narrative){setDefeat(result.defeat_narrative);setPhase("defeat");setLoading(false);return;}
+    if(!result.choices?.length){setErr("No choices generated. Try retry.");setLoading(false);return;}
+    setScene(result);setPhase("play");setLoading(false);
+  };
+
+  useEffect(()=>{load([],sc.startF,sc.startR);},[]);
+  useEffect(()=>{if(ref.current)ref.current.scrollTo({top:0,behavior:"smooth"});},[phase,scene]);
+
+  const doRoll=()=>{
+    const roll=Math.floor(Math.random()*100)+1;
+    const success=roll<=sel.probability;
+    setOk(success);
+    const out=success?sel.success_outcome:sel.failure_outcome;
+    setOutcome(out);
+    const fc=success?(sel.fc_s||{}):(sel.fc_f||{});
+    const newF={...fac};for(const k in fc)newF[k]=Math.max(0,Math.min(100,(newF[k]||0)+(fc[k]||0)));
+    setFac(newF);
+    const rc=success?(sel.rc_s||{}):(sel.rc_f||{});
+    const newR={...res};const mx={};sc.resources.forEach(r=>mx[r.key]=r.mx);
+    for(const k in rc)newR[k]=Math.max(0,Math.min(mx[k]||10,(newR[k]||0)+(rc[k]||0)));
+    setRes(newR);
+    const entry={year:scene.year,title:scene.title,choice:sel.text,ok:success,outcome:out,risk:sel.risk_level};
+    const nh=[...hist,entry];setHist(nh);setTurn(t=>t+1);
+    nxt.current={hist:nh,fac:newF,res:newR};setPhase("outcome");
+  };
+
+  if(phase==="victory"||phase==="defeat")return <End sc={sc} hist={hist} fac={fac} res={res} won={phase==="victory"} defText={defeat} onNew={onQuit} onLB={onLB}/>;
+
+  return <div ref={ref} style={{maxWidth:720,margin:"0 auto",padding:"24px 24px 80px"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14,borderBottom:`1px solid ${T.bdr}`,paddingBottom:10}}>
+      <div>
+        <span style={{color:T.goldD,fontSize:"0.78rem",letterSpacing:"0.1em"}}>{sc.title.toUpperCase()}</span>
+        {scene&&<><span style={{color:T.bdr,margin:"0 8px"}}>&middot;</span><span style={{color:T.creamD,fontSize:"0.78rem"}}>{scene.year}</span></>}
+      </div>
+      <div style={{display:"flex",alignItems:"center",gap:14}}>
+        <span style={{color:T.creamD,fontSize:"0.78rem"}}>Turn {turn+1}</span>
+        <button onClick={onQuit} style={{background:"none",border:`1px solid ${T.bdr}`,color:T.creamD,fontSize:"0.72rem",padding:"3px 9px",cursor:"pointer",borderRadius:3,fontFamily:"'Cormorant Garamond',serif"}}>Quit</button>
+      </div>
+    </div>
+
+    <AvgBar fac={fac} defs={sc.factions}/>
+    <FactionBars sc={sc} fac={fac}/>
+    <ResBars sc={sc} res={res}/>
+
+    {loading&&<div style={{textAlign:"center",padding:"60px 0"}}><div style={{color:T.gold,fontSize:"1.5rem",marginBottom:14,animation:"pulse 1.5s infinite"}}>{"\u2726"}</div><p style={{color:T.creamD,fontSize:"1rem",fontStyle:"italic"}}>{status}</p></div>}
+
+    {err&&<div style={{textAlign:"center",padding:"30px 14px"}}><p style={{color:T.redB,marginBottom:10,fontSize:"0.9rem"}}>Scenario generation failed.</p><p style={{color:T.creamD,fontSize:"0.78rem",marginBottom:16,wordBreak:"break-word"}}>{err}</p><Btn onClick={()=>load(hist,fac,res)} small>RETRY</Btn></div>}
+
+    {!loading&&!err&&scene&&<>
+      <h2 style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"1.4rem",fontWeight:700,marginTop:16,marginBottom:6,letterSpacing:"0.08em"}}>{scene.title}</h2>
+      {scene.standing_summary&&<p style={{color:T.creamD,fontSize:"0.88rem",fontStyle:"italic",marginBottom:20}}>{scene.standing_summary}</p>}
+      <p style={{whiteSpace:"pre-wrap",lineHeight:1.8,fontSize:"1.05rem",marginBottom:28}}>{scene.narrative}</p>
+
+      {avg>=85&&phase==="play"&&<div style={{background:"rgba(45,90,39,0.12)",border:`1px solid ${T.green}`,borderRadius:4,padding:14,marginBottom:20,textAlign:"center"}}>
+        <p style={{color:T.greenB,fontFamily:"'Cinzel',serif",fontSize:"0.78rem",letterSpacing:"0.1em",marginBottom:10}}>YOUR POSITION IS DOMINANT — Declare victory or press your fortune.</p>
+        <Btn onClick={()=>setPhase("victory")} small green>DECLARE VICTORY</Btn>
+      </div>}
+
+      {(phase==="play"||phase==="rolling"||phase==="outcome")&&scene.choices&&<div style={{marginTop:6}}>
+        <p style={{color:T.goldB,fontFamily:"'Cinzel',serif",fontSize:"0.78rem",letterSpacing:"0.15em",marginBottom:14,textTransform:"uppercase"}}>What do you do?</p>
+        {scene.choices.map(c=>{
+          const s=sel?.id===c.id;
+          const rc=c.risk_level==="desperate"?"#ff4444":c.risk_level==="high"?T.redB:c.risk_level==="moderate"?T.gold:T.greenB;
+          return <button key={c.id} onClick={()=>{if(phase==="play"){setSel(c);setPhase("rolling");}}}
+            disabled={phase!=="play"}
+            style={{display:"block",width:"100%",padding:"14px 18px",marginBottom:10,background:s?T.cardH:T.card,border:`1px solid ${s?T.gold:T.bdr}`,borderRadius:4,color:T.cream,fontSize:"1rem",fontFamily:"'Cormorant Garamond',serif",textAlign:"left",cursor:phase==="play"?"pointer":"default",transition:"all 0.2s",lineHeight:1.6}}>
+            <div style={{marginBottom:6}}>{c.text}</div>
+            <span style={{fontSize:"0.68rem",letterSpacing:"0.08em",textTransform:"uppercase",color:rc,fontFamily:"'Cinzel',serif"}}>{c.risk_level}</span>
+          </button>;
+        })}
+      </div>}
+
+      {phase==="rolling"&&sel&&<Dice onDone={doRoll}/>}
+      {phase==="outcome"&&<div style={{marginTop:20,animation:"fadeIn 0.4s"}}>
+        <p style={{fontFamily:"'Cinzel',serif",fontSize:"1.05rem",fontWeight:700,letterSpacing:"0.15em",marginBottom:14,textAlign:"center",color:ok?T.greenB:T.redB}}>{ok?"FORTUNE FAVORS YOU":"THE FATES ARE CRUEL"}</p>
+        <div style={{background:ok?"rgba(45,90,39,0.12)":"rgba(139,37,0,0.12)",border:`1px solid ${ok?T.green:T.red}`,borderRadius:4,padding:18,marginBottom:20}}>
+          <p style={{color:T.cream,fontSize:"1rem",lineHeight:1.75}}>{outcome}</p>
+        </div>
+        <Btn onClick={()=>load(nxt.current.hist,nxt.current.fac,nxt.current.res)}>CONTINUE</Btn>
+      </div>}
+    </>}
+  </div>;
+}
+
+// --- TITLE ---
+function Title({onStart,onLB}){
+  const[sel,setSel]=useState(null);const lb=getLB();
+  return <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",padding:"60px 24px"}}>
+    <div style={{marginBottom:18,color:T.goldD,fontSize:"2.5rem",letterSpacing:"0.3em"}}>{"\u2726"}</div>
+    <h1 style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"2.2rem",fontWeight:700,letterSpacing:"0.12em",marginBottom:6,textAlign:"center"}}>FORTUNA</h1>
+    <p style={{color:T.creamD,fontSize:"1rem",fontStyle:"italic",marginBottom:6}}>A Game of History & Chance</p>
+    <div style={{width:50,height:1,background:T.goldD,margin:"14px auto 20px"}}/>
+    <p style={{color:T.creamD,fontSize:"1.02rem",maxWidth:500,lineHeight:1.7,marginBottom:10,textAlign:"center"}}>Step into a pivotal moment in the ancient world. Build alliances, manage resources, and navigate faction politics through alternate history. Every choice shifts the balance of power — and fortune decides the rest.</p>
+    <p style={{color:T.goldD,fontSize:"0.88rem",fontStyle:"italic",marginBottom:32,textAlign:"center"}}>Alea iacta esto.</p>
+    <p style={{color:T.goldB,fontFamily:"'Cinzel',serif",fontSize:"0.78rem",letterSpacing:"0.15em",marginBottom:16,textTransform:"uppercase"}}>Choose your era</p>
+    <div style={{width:"100%",maxWidth:540}}>
+      {SCENARIOS.map(s=><button key={s.id} onClick={()=>setSel(s)} style={{display:"block",width:"100%",padding:"16px 20px",marginBottom:10,background:sel?.id===s.id?T.cardH:T.card,border:`1px solid ${sel?.id===s.id?T.gold:T.bdr}`,borderRadius:4,textAlign:"left",cursor:"pointer",transition:"all 0.2s",fontFamily:"'Cormorant Garamond',serif"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:4}}>
+          <span style={{fontFamily:"'Cinzel',serif",color:T.gold,fontSize:"0.95rem",fontWeight:700}}>{s.title}</span>
+          <span style={{color:T.goldD,fontSize:"0.82rem"}}>{s.sub}</span>
+        </div>
+        <p style={{color:T.creamD,fontSize:"0.9rem",lineHeight:1.5}}>{s.desc}</p>
+      </button>)}
+    </div>
+    <div style={{display:"flex",gap:14,marginTop:24,animation:sel?"fadeIn 0.3s":"none"}}>
+      {sel&&<Btn onClick={()=>onStart(sel)}>BEGIN</Btn>}
+      {lb.length>0&&<Btn onClick={onLB} small>HALL OF FAME</Btn>}
+    </div>
   </div>;
 }
 
 function App(){
-const[scr,setScr]=useState(“title”);const[act,setAct]=useState(null);const[key,setKey]=useState(0);
-return <>
-{scr===“title”&&<Title onStart={s=>{setAct(s);setScr(“game”);setKey(k=>k+1);}} onLB={()=>setScr(“lb”)}/>}
-{scr===“game”&&act&&<Game key={key} sc={act} onQuit={()=>{setScr(“title”);setAct(null);}} onLB={()=>setScr(“lb”)}/>}
-{scr===“lb”&&<LBView onBack={()=>setScr(“title”)}/>}
-</>;
+  const[scr,setScr]=useState("title");const[act,setAct]=useState(null);const[key,setKey]=useState(0);
+  return <>
+    {scr==="title"&&<Title onStart={s=>{setAct(s);setScr("game");setKey(k=>k+1);}} onLB={()=>setScr("lb")}/>}
+    {scr==="game"&&act&&<Game key={key} sc={act} onQuit={()=>{setScr("title");setAct(null);}} onLB={()=>setScr("lb")}/>}
+    {scr==="lb"&&<LBView onBack={()=>setScr("title")}/>}
+  </>;
 }
-ReactDOM.createRoot(document.getElementById(‘root’)).render(<App/>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
-
 </body>
 </html>
